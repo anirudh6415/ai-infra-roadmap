@@ -67,9 +67,10 @@ Curated by phase. **Free** unless marked 💲. For a map of tools by category, s
 | | [GPU Performance Background User's Guide](https://docs.nvidia.com/deeplearning/performance/dl-performance-gpu-background/index.html) (NVIDIA) | 📚 | 17 |
 | | Roofline: An Insightful Visual Performance Model (Williams, Waterman, Patterson, 2009) | 📄 | 17 |
 | | NVIDIA Hopper and Blackwell architecture technical briefs (nvidia.com) | 📄 | 18 |
+| | [SemiAnalysis](https://semianalysis.com/) (industry context) · [Transformer Engine](https://github.com/NVIDIA/TransformerEngine) (FP8 in practice) | 📚 | 18 |
 | | [PyTorch profiler recipe](https://docs.pytorch.org/tutorials/recipes/recipes/profiler_recipe.html) | 📚 | 19 |
 | | [Nsight Systems](https://developer.nvidia.com/nsight-systems) · [Nsight Compute](https://developer.nvidia.com/nsight-compute) | 📚 | 19–20 |
-| | [Triton tutorials](https://triton-lang.org/main/getting-started/tutorials/index.html) | 📚 | 21–22 |
+| | [Triton tutorials](https://triton-lang.org/main/getting-started/tutorials/index.html) | 📚 | 21–24 |
 | | [Triton Puzzles](https://github.com/gpu-mode/Triton-Puzzles) | 🧑‍💻 | 21 |
 | | [torch.compile tutorial](https://docs.pytorch.org/tutorials/intermediate/torch_compile_tutorial.html) | 📚 | 24 |
 | | [PaLM paper](https://arxiv.org/abs/2204.02311) (appendix: MFU definition) | 📄 | 24 |
@@ -85,6 +86,7 @@ Curated by phase. **Free** unless marked 💲. For a map of tools by category, s
 
 | | Resource | Type | Week |
 |---|---|---|---|
+| | [The Ultra-Scale Playbook](https://huggingface.co/spaces/nanotron/ultrascale-playbook) | 📘 | 27–30, 38 |
 | | [PyTorch DDP tutorial](https://docs.pytorch.org/tutorials/intermediate/ddp_tutorial.html) | 📚 | 27 |
 | | [nanoGPT](https://github.com/karpathy/nanoGPT) · [torchtitan](https://github.com/pytorch/torchtitan) | 🧑‍💻 | 27–34 |
 | | [nccl-tests](https://github.com/NVIDIA/nccl-tests) · [NCCL documentation](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/index.html) | 🧑‍💻 | 28 |
@@ -93,8 +95,9 @@ Curated by phase. **Free** unless marked 💲. For a map of tools by category, s
 | | [Megatron-LM](https://arxiv.org/abs/1909.08053) · [GPipe](https://arxiv.org/abs/1811.06965) | 📄 | 30 |
 | | ML Engineering Open Book: network and storage chapters | 📘 | 32, 37 |
 | | [PyTorch Distributed Checkpoint](https://docs.pytorch.org/docs/stable/distributed.checkpoint.html) | 📚 | 33 |
-| | [torchrun (elastic launch)](https://docs.pytorch.org/docs/stable/elastic/run.html) | 📚 | 34 |
-| | [Slurm quick start](https://slurm.schedmd.com/quickstart.html) · [slurm-docker-cluster](https://github.com/giovtorres/slurm-docker-cluster) | 📚 | 35 |
+| | [torchrun (elastic launch)](https://docs.pytorch.org/docs/stable/elastic/run.html) | 📚 | 27, 34–35 |
+| | [Slurm quick start](https://slurm.schedmd.com/quickstart.html) · [slurm-docker-cluster](https://github.com/giovtorres/slurm-docker-cluster) | 📚 | 35–36 |
+| | [How to Scale Your Model](https://jax-ml.github.io/scaling-book/) (training compute and FLOPs) · [PaLM (MFU)](https://arxiv.org/abs/2204.02311) | 📘 | 38 |
 | | [Ray docs](https://docs.ray.io/en/latest/index.html) · [KubeRay](https://github.com/ray-project/kuberay) | 📚 | 36 |
 
 ## Phase 4 · Platform & economics
@@ -108,24 +111,25 @@ Curated by phase. **Free** unless marked 💲. For a map of tools by category, s
 | | [KAI Scheduler](https://github.com/NVIDIA/KAI-Scheduler) · [Volcano](https://volcano.sh/) | 🧑‍💻 | 42 |
 | | [Kubernetes multi-tenancy](https://kubernetes.io/docs/concepts/security/multi-tenancy/) | 📚 | 42 |
 | | [Argo CD](https://github.com/argoproj/argo-cd) (GitOps) | 🧑‍💻 | 43 |
-| | [Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/) · [KServe](https://kserve.github.io/website/) | 📚 | 43 |
+| | [Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/) · [KServe](https://kserve.github.io/website/) · [llm-d](https://llm-d.ai/) · [KEDA](https://keda.sh/) | 📚 | 43 |
 | | [OpenTelemetry](https://opentelemetry.io/docs/) | 📚 | 43 |
 | | [Terraform tutorials](https://developer.hashicorp.com/terraform/tutorials) | 📚 | 44 |
 | | [FinOps Framework](https://www.finops.org/framework/) · [OpenCost](https://www.opencost.io/) | 📚 | 45 |
-| | [Google OR-Tools](https://developers.google.com/optimization) · [PuLP](https://coin-or.github.io/pulp/) · [Pyomo](https://www.pyomo.org/) | 📚 | 46 |
+| | [Google OR-Tools](https://developers.google.com/optimization) · [PuLP](https://coin-or.github.io/pulp/) · [Pyomo](https://www.pyomo.org/) | 📚 | 46, 49 |
 | | [Gurobi modeling examples](https://github.com/Gurobi/modeling-examples) | 🧑‍💻 | 46 |
 | | *Model Building in Mathematical Programming* (H. P. Williams) 💲 | 📘 | 46 |
 | | [Forecasting: Principles and Practice, 3rd ed.](https://otexts.com/fpp3/) (Hyndman & Athanasopoulos) | 📘 | 47 |
 | | [SimPy](https://simpy.readthedocs.io/) | 📚 | 47 |
 | | [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (Anthropic) | ✍️ | 48 |
-| | [Model Context Protocol](https://modelcontextprotocol.io/) (spec + SDKs) | 📚 | 48 |
+| | [Model Context Protocol](https://modelcontextprotocol.io/) (spec + SDKs) | 📚 | 48, 51 |
+| | [Streamlit documentation](https://docs.streamlit.io/) (planner UI) | 📚 | 50 |
 
 ## Phase 5 · Serving at scale
 
 | | Resource | Type | Week |
 |---|---|---|---|
 | | [DistServe](https://arxiv.org/abs/2401.09670) · [Splitwise](https://arxiv.org/abs/2311.18677) · [Mooncake](https://arxiv.org/abs/2407.00079) | 📄 | 53 |
-| | [vLLM: Disaggregated Prefilling](https://docs.vllm.ai/en/latest/features/disagg_prefill.html) · [llm-d](https://llm-d.ai/) · [NVIDIA Dynamo](https://github.com/ai-dynamo/dynamo) | 📚 | 54 |
+| | [vLLM: Disaggregated Prefilling](https://docs.vllm.ai/en/latest/features/disagg_prefill.html) · [llm-d](https://llm-d.ai/) · [NVIDIA Dynamo](https://github.com/ai-dynamo/dynamo) | 📚 | 54–55 |
 | | [SGLang](https://github.com/sgl-project/sglang) (router) · [vLLM production stack](https://github.com/vllm-project/production-stack) | 🧑‍💻 | 55 |
 | | [LMCache](https://github.com/LMCache/LMCache) · [Mooncake](https://github.com/kvcache-ai/Mooncake) | 🧑‍💻 | 56 |
 | | [S-LoRA](https://arxiv.org/abs/2311.03285) · [vLLM: LoRA Adapters](https://docs.vllm.ai/en/latest/features/lora.html) | 📄 | 57 |
@@ -164,7 +168,7 @@ Curated by phase. **Free** unless marked 💲. For a map of tools by category, s
 | | [Docker: Get started](https://docs.docker.com/get-started/) | 📚 | 4 |
 | | [vLLM: Using Docker](https://docs.vllm.ai/en/latest/deployment/docker.html) | 📚 | 4 |
 | | [Learn Kubernetes Basics](https://kubernetes.io/docs/tutorials/kubernetes-basics/) | 🎓 | 8 |
-| | [kind quick start](https://kind.sigs.k8s.io/docs/user/quick-start/) | 📚 | 8, 40 |
+| | [kind quick start](https://kind.sigs.k8s.io/docs/user/quick-start/) | 📚 | 8, 10, 40, 42–43 |
 | | [vLLM: Using Kubernetes](https://docs.vllm.ai/en/latest/deployment/k8s.html) | 📚 | 10 |
 | | [GitHub Actions documentation](https://docs.github.com/en/actions) | 📚 | 13 |
 | | [MLflow documentation](https://mlflow.org/docs/latest/) | 📚 | 24 |
@@ -179,6 +183,12 @@ Curated by phase. **Free** unless marked 💲. For a map of tools by category, s
 | | [ANN-Benchmarks](https://ann-benchmarks.com/) | 🧑‍💻 |
 | | [VectorDBBench](https://github.com/zilliztech/VectorDBBench) | 🧑‍💻 |
 | | [Milvus](https://github.com/milvus-io/milvus) · [Qdrant](https://github.com/qdrant/qdrant) · [pgvector](https://github.com/pgvector/pgvector) | 🧑‍💻 |
+
+## Writing your posts
+
+| | Resource | Type | Week |
+|---|---|---|---|
+| | Model your posts on these: [Making Deep Learning Go Brrrr](https://horace.io/brrr_intro.html) (explains a mechanism from first principles) · [CUDA matmul worklog](https://siboehm.com/articles/22/CUDA-MMM) (step-by-step measured progress) | ✍️ | 13, 26, 39, 52, 65, 78 |
 
 ## Interview prep & system design
 

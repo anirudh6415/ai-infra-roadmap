@@ -107,4 +107,16 @@ Alongside the phases: [ongoing tracks](ongoing.md) (Foundations: containers, Kub
 
 Ideas that came up mid-phase. Don't start them now; revisit at the next phase boundary.
 
+**Deferred on purpose** (add as new weeks or a Phase 7 when the time comes):
+
+- **Agent infrastructure in depth:** agent runtimes, tool sandboxes, long-running task execution, memory stores, evaluating agents at scale (W48 covers only capacity modeling and MCP basics).
+- **Image, video and audio generation serving:** diffusion models, video generation, speech-to-text and text-to-speech have very different cost shapes from LLMs.
+- **LLM application observability:** tracing prompts, evals in production, cost per feature.
+- **Security in depth:** confidential computing, model-weight protection, supply-chain security for images and models.
+- **Data center power and cooling:** rack power density, liquid cooling, and site planning beyond W18 and W75.
+- **ML platform pipelines:** Kubeflow, feature stores, training pipelines.
+- **Edge and on-device deployment** beyond the W63 aside.
+
+**Your ideas:**
+
 - _(add ideas here)_

@@ -2,14 +2,14 @@
 // Every content/*.md file without its own template: resources, people, notes,
 // ongoing tracks, interview prep, mini-projects, archive, and any new file you add.
 import Base from '../layouts/Base.astro';
-import { genericPages, headings } from '../lib/content.mjs';
+import { genericPages, headings, linkWeeks } from '../lib/content.mjs';
 import { renderMarkdown, slugify } from '../lib/markdown.mjs';
 
 export function getStaticPaths() {
   return genericPages().map((p) => ({ params: { slug: p.slug || undefined }, props: p }));
 }
 const { path, slug, title, body } = Astro.props;
-const html = renderMarkdown(body, path);
+const html = linkWeeks(renderMarkdown(body, path), { weekColumn: path === 'resources.md' });
 const toc = headings(body);
 const section = slug.split('/')[0];
 const sectionLabel: Record<string, string> = {

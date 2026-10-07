@@ -2,7 +2,7 @@
 // weeks, tasks, progress, current week, skills, log entries, project status.
 // The Markdown files stay the single source of truth.
 import { PHASES, PROJECTS, SITE } from '../config.mjs';
-import { plain, renderInline, renderMarkdown, url } from './markdown.mjs';
+import { plain, renderInline, renderMarkdown, slugify, url } from './markdown.mjs';
 
 const RAW = import.meta.glob('/content/**/*.md', { query: '?raw', import: 'default', eager: true });
 
@@ -83,7 +83,7 @@ function parseWeek(chunk, phase, file) {
     const f = line.match(/^[-*]\s+\*\*([^*:]+):\*\*\s*(.+)$/);
     const t = line.match(TASK);
     if (t) tasks.push({ done: t[1].toLowerCase() === 'x', html: renderInline(t[2], file), text: plain(t[2]) });
-    else if (f) fields.push({ label: f[1].trim(), html: renderInline(f[2], file), text: plain(f[2]) });
+    else if (f) fields.push({ label: f[1].trim(), html: renderInline(f[2], file), text: plain(f[2]), raw: f[2] });
   }
   const done = tasks.filter((t) => t.done).length;
   const learn = fields.find((f) => /learn/i.test(f.label));
@@ -91,9 +91,14 @@ function parseWeek(chunk, phase, file) {
   const mini = fields.find((f) => /mini-project/i.test(f.label));
   const summary = (mini || build || learn || fields[0] || { text: '' }).text;
   const miniName = mini ? (mini.text.match(/^([^:]+):/) || [, ''])[1].trim() : '';
+  // Optional repo link: - **Mini-project:** [`name`](https://github.com/...): what you ship.
+  const miniRepo = mini ? ((mini.raw.match(/^\[[^\]]*\]\((https?:[^)]+)\)/) || [])[1] || '') : '';
+  const wid = 'w' + String(num).padStart(2, '0');
+  const project = PROJECTS.find((pr) => pr.phase === phase.n);
   const miniDesc = mini ? mini.text.replace(/^[^:]+:\s*/, '').replace(/\.$/, '') : '';
   return {
-    mini: mini ? { name: miniName, desc: miniDesc, html: mini.html } : null,
+    mini: mini ? { name: miniName, desc: miniDesc, html: mini.html, repo: miniRepo, href: url(`/projects/weekly/#${wid}`) } : null,
+    project: project ? { code: project.code, name: project.name, href: url(`/projects/${project.slug}/`) } : null,
     reading: readingFor(num),
     n: num, code: 'W' + String(num).padStart(2, '0'), id: 'w' + String(num).padStart(2, '0'),
     title, tag, light, phase: phase.n, phaseSlug: phase.slug,
@@ -181,9 +186,12 @@ export function getSkills() {
     const [name, ...lines] = part.split('\n');
     const { header, body: rows } = tableRows(lines);
     const col = (re) => header.findIndex((h) => re.test(h));
-    const iSkill = Math.max(0, col(/skill/i)), iDepth = col(/depth/i), iPhase = col(/phase/i);
+    const iSkill = Math.max(0, col(/skill/i)), iDepth = col(/depth/i), iPhase = col(/weeks?|phase/i);
     const iDone = col(/done/i), iRes = col(/learn|resource/i);
     const skills = rows.map((c) => ({
+      id: 'skill-' + slugify(plain(c[iSkill] || '')),
+      title: plain(c[iSkill] || ''),
+      weeks: parseWeekList(iPhase >= 0 ? c[iPhase] : ''),
       name: renderInline(c[iSkill] || '', file),
       depth: iDepth >= 0 ? plain(c[iDepth] || '') : '',
       phase: iPhase >= 0 ? c[iPhase] || '' : '',
@@ -207,6 +215,65 @@ export function getSkills() {
       total: all.length,
     },
   };
+}
+
+/** "W01–W04, W25" → [1,2,3,4,25]. Words like "ongoing" or "onward" are ignored. */
+export function parseWeekList(cell = '') {
+  const out = new Set();
+  for (const m of String(cell).replace(/[–—]/g, '-').matchAll(/W?(\d+)\s*(?:-\s*W?(\d+))?/gi)) {
+    const a = Number(m[1]), b = Number(m[2] || m[1]);
+    for (let w = a; w <= b && w - a < 80; w++) out.add(w);
+  }
+  return [...out].sort((x, y) => x - y);
+}
+
+let _skillsByWeek;
+/** Skills taught in week n, as { id, title, href }. */
+export function skillsFor(n) {
+  if (!_skillsByWeek) {
+    _skillsByWeek = new Map();
+    for (const g of getSkills().groups) for (const s of g.skills) for (const w of s.weeks) {
+      if (!_skillsByWeek.has(w)) _skillsByWeek.set(w, []);
+      _skillsByWeek.get(w).push({ id: s.id, title: s.title, href: url(`/skills/#${s.id}`) });
+    }
+  }
+  return _skillsByWeek.get(n) || [];
+}
+
+/** Week number → its page URL (for linking from skills, projects, etc.). */
+export function weekHref(n) {
+  const w = getAllWeeks().find((x) => x.n === n);
+  return w ? w.href : '';
+}
+
+/**
+ * Turn plain week references in rendered HTML into links:
+ *  - "W08", "W21–W23", "W1–W4" anywhere in text (not inside links or code)
+ *  - with weekColumn=true, table cells that hold only week numbers ("3", "14–16", "8, 40")
+ */
+export function linkWeeks(html, { weekColumn = false } = {}) {
+  const link = (n, label) => {
+    const href = weekHref(Number(n));
+    return href ? `<a class="wk-link" href="${href}">${label}</a>` : label;
+  };
+  const parts = html.split(/(<[^>]+>)/);
+  let inA = 0, inCode = 0;
+  for (let i = 0; i < parts.length; i++) {
+    const s = parts[i];
+    if (s.startsWith('<')) {
+      if (/^<a[\s>]/i.test(s)) inA++;
+      else if (/^<\/a>/i.test(s)) inA = Math.max(0, inA - 1);
+      else if (/^<(code|pre)[\s>]/i.test(s)) inCode++;
+      else if (/^<\/(code|pre)>/i.test(s)) inCode = Math.max(0, inCode - 1);
+      continue;
+    }
+    if (inA || inCode || !s) continue;
+    parts[i] = s.replace(/(?<![\w/#])W(\d{1,2})(?![\w])/g, (m, n) => link(n, m));
+    if (weekColumn && parts[i - 1] === '<td>' && parts[i + 1] === '</td>' && /^[\d–\-,\s]+$/.test(s.trim()) && /\d/.test(s)) {
+      parts[i] = s.replace(/\d+/g, (n) => link(n, n));
+    }
+  }
+  return parts.join('');
 }
 
 /* ------------------------------------------------- resources → week map */

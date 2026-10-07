@@ -15,7 +15,7 @@ const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', pa
     <div class="hero-text">
       <span class="label">Projects · one per week</span>
       <h1 class="page-title">{withMini.length} weekly mini-projects</h1>
-      <p class="lede">Every week ships one small, named thing: a script, a chart, a kernel or a note. They add up to the phase projects. A mini-project counts as shipped when all of its week's tasks are ticked.</p>
+      <p class="lede">Every week ships one small, named thing: a script, a chart, a kernel or a note. They add up to the phase projects. A mini-project counts as shipped when all of its week's tasks are ticked. To link a repo, write the name as a link in the phase file: <code>- **Mini-project:** [`name`](https://github.com/…): what you ship.</code></p>
     </div>
     <div class="spec">
       <div class="spec-title">MINI-PROJECTS</div>
@@ -35,13 +35,14 @@ const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', pa
       </div>
       <div class="table-wrap" style="border-top:0">
         <table class="skill-table">
-          <thead><tr><th>Week</th><th>Mini-project</th><th class="dl">What you ship</th><th style="text-align:right">Status</th></tr></thead>
+          <thead><tr><th>Week</th><th>Mini-project</th><th class="dl">What you ship</th><th>Repo</th><th style="text-align:right">Status</th></tr></thead>
           <tbody>
             {p.weeks.filter((w) => w.mini).map((w) => (
-              <tr>
+              <tr id={w.id} class="skill-row">
                 <td class="mono" style="font-size:12.5px"><a href={w.href}>{w.code}</a></td>
-                <td><span class="mini-name">{w.mini.name}</span></td>
+                <td><a class="mini-name" href={w.href}>{w.mini.name}</a></td>
                 <td class="done-text">{w.mini.desc}</td>
+                <td class="mono" style="font-size:12px">{w.mini.repo ? <a href={w.mini.repo}>repo ↗</a> : <span class="muted">add later</span>}</td>
                 <td class="st"><span class={`chip ${w.status}`}>{statusLabel[w.status]}</span></td>
               </tr>
             ))}

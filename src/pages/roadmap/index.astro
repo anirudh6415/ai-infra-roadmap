@@ -3,11 +3,11 @@ import Base from '../../layouts/Base.astro';
 import PhaseCards from '../../components/PhaseCards.astro';
 import Timeline from '../../components/Timeline.astro';
 import { SITE } from '../../config.mjs';
-import { getFile, getTotals, getAllWeeks, getPhases } from '../../lib/content.mjs';
+import { getFile, getTotals, getAllWeeks, getPhases, linkWeeks } from '../../lib/content.mjs';
 import { renderMarkdown } from '../../lib/markdown.mjs';
 
 const { data, body } = getFile('roadmap/index.md');
-const html = renderMarkdown(body, 'roadmap/index.md');
+const html = linkWeeks(renderMarkdown(body, 'roadmap/index.md'));
 const totals = getTotals();
 const weeks = getAllWeeks();
 const phases = getPhases();

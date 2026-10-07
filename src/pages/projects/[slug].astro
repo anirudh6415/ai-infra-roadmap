@@ -11,6 +11,7 @@ const p = getProjects().find((x) => x.slug === slug);
 const phase = getPhases().find((x) => x.n === p.phase);
 const html = renderMarkdown(p.body, p.file);
 const toc = headings(p.body);
+const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', partial: 'STARTED', ahead: 'AHEAD' };
 ---
 <Base title={`${p.code} · ${p.name}`} source={p.file}>
   <section class="page-head">
@@ -38,4 +39,26 @@ const toc = headings(p.body);
   )}
 
   <div class="prose" set:html={html} />
+
+  <section class="section">
+    <div class="group-head">
+      <h2><span class="label" style="margin-right:10px">Built from</span>Weeks &amp; mini-projects</h2>
+      <a class="mono" style="font-size:12px" href={phase.href}>→ Phase {phase.n} page</a>
+    </div>
+    <div class="table-wrap" style="border-top:0">
+      <table class="skill-table">
+        <thead><tr><th>Week</th><th>Topic</th><th>Mini-project</th><th style="text-align:right">Status</th></tr></thead>
+        <tbody>
+          {phase.weeks.map((w) => (
+            <tr>
+              <td class="mono" style="font-size:12.5px"><a href={w.href}>{w.code}</a></td>
+              <td><a href={w.href} style="text-decoration:none;color:inherit">{w.title}</a></td>
+              <td>{w.mini ? <a class="mini-name" href={w.mini.href}>{w.mini.name}</a> : '—'}</td>
+              <td class="st"><span class={`chip ${w.status}`}>{statusLabel[w.status]}</span></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
 </Base>

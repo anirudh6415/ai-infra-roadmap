@@ -1,26 +1,50 @@
 ---
+import { skillsFor } from '../lib/content.mjs';
 interface Props { week: any }
 const { week } = Astro.props;
-const labels: Record<string, string> = { Learn: 'Learn · 30 min', Build: 'Build · Sat', Ship: 'Ship · Sun', Plan: 'Plan', 'Mini-project': 'Mini-project' };
+const labels: Record<string, string> = { Learn: 'Learn · 30 min', Build: 'Build · Sat', Ship: 'Ship · Sun', Plan: 'Plan' };
+const fields = week.fields.filter((f: any) => f.label !== 'Mini-project');
+const skills = skillsFor(week.n);
 ---
-{week.fields.length > 0 && (
-  <div class="fields">
-    {week.fields.map((f: any) => (
-      <>
-        <span class={`f-label${f.label === 'Mini-project' ? ' f-mini' : ''}`}>{labels[f.label] || f.label}</span>
-        <span class={f.label === 'Mini-project' ? 'f-mini-val' : undefined} set:html={f.html} />
-      </>
-    ))}
-    {week.reading.length > 0 && (
-      <>
-        <span class="f-label">Read</span>
-        <span class="f-read">{week.reading.map((r: string, i: number) => (
-          <><span set:html={r} />{i < week.reading.length - 1 && <span class="sep"> · </span>}</>
-        ))}</span>
-      </>
-    )}
-  </div>
-)}
+<div class="fields">
+  {fields.map((f: any) => (
+    <>
+      <span class="f-label">{labels[f.label] || f.label}</span>
+      <span set:html={f.html} />
+    </>
+  ))}
+  {week.mini && (
+    <>
+      <span class="f-label f-mini">Mini-project</span>
+      <span class="f-mini-val">
+        <a class="mini-link" href={week.mini.href}><code>{week.mini.name}</code></a>: {week.mini.desc}.
+        {week.mini.repo && <> <a href={week.mini.repo}>repo ↗</a></>}
+      </span>
+    </>
+  )}
+  {week.project && (
+    <>
+      <span class="f-label">Project</span>
+      <span>Part of <a href={week.project.href}>{week.project.code} · {week.project.name}</a></span>
+    </>
+  )}
+  {skills.length > 0 && (
+    <>
+      <span class="f-label">Skills</span>
+      <span class="f-read">{skills.map((s, i) => (
+        <><a href={s.href}>{s.title}</a>{i < skills.length - 1 && <span class="sep"> · </span>}</>
+      ))}</span>
+    </>
+  )}
+  {week.reading.length > 0 && (
+    <>
+      <span class="f-label">Read</span>
+      <span class="f-read">{week.reading.map((r: string, i: number) => (
+        <><span set:html={r} />{i < week.reading.length - 1 && <span class="sep"> · </span>}</>
+      ))}</span>
+    </>
+  )}
+</div>
 {week.tasks.length > 0 && (
   <div>
     <div class="label" style="color: var(--muted); margin-bottom: 8px">Done when · {week.done}/{week.total}</div>

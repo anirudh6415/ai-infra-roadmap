@@ -59,7 +59,7 @@ scripts/append_log.py      quick-log issue → log entry + ticks tasks
 - **Build:** …
 - **Ship:** …
 - **Foundations:** …            (optional)
-- **Mini-project:** `name`: what you ship.
+- **Mini-project:** `name`: what you ship.   (or [`name`](repo-url): … to link a repo)
 
 **Done when**
 
@@ -71,11 +71,15 @@ scripts/append_log.py      quick-log issue → log entry + ticks tasks
 - Task IDs are `W<week>.<n>` (n = order of the checkbox within the week). The log form and `append_log.py` use them, with the task text as a fallback.
 - Week numbers continue across phases (Phase 5 starts at 53).
 
-**Skills** (`content/skills.md`): `| Skill | Depth | Phase | Done looks like | Learn from | Status |`. **Status must stay the last column** (⬜ / 🟨 / ✅). Depth uses `<span class="badge deep|working|aware">`.
+**Skills** (`content/skills.md`): `| Skill | Depth | Weeks | Done looks like | Learn from | Status |`. **Weeks** lists the weeks that teach the skill (`W03`, `W01–W04, W25`, `W26 onward`); each listed week shows the skill in its **Skills** row, and the skills page links back to those weeks. Every week should map to at least one skill. **Status must stay the last column** (⬜ / 🟨 / ✅). Depth uses `<span class="badge deep|working|aware">`.
 
 **Resources** (`content/resources.md`): phase tables are `| | Resource | Type | Week |`. A number, range or list in **Week** (`3`, `14–16`, `8, 40`) automatically adds the row to those weeks' **Read** line.
 
 **Projects:** the first line after the title is `**Phase N · Weeks a–b** · Repo: … · Status: ⬜`.
+
+**Automatic linking:** plain week references (`W08`, `W21–W23`) on content pages and the numbers in the resources **Week** column become links to those weeks (`linkWeeks` in `src/lib/content.mjs`). Each week's details show its mini-project, project, skills and reading automatically. When adding content, make sure every week keeps at least one skill and one resource.
+
+**Deferred topics** (agents in depth, image/video/audio generation serving, LLM app observability, security in depth, data center power, ML pipelines, edge) are listed in the parking lot in `content/roadmap/index.md`. Add them as new weeks or a Phase 7 later.
 
 **Markdown extras:** `!!! type "Title"` callouts, `??? type "Title"` collapsible callouts, and code fences `formula` / `text` / `prompt` for dark terminal boxes. Links between `.md` files are rewritten to site URLs.
 
