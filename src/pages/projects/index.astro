@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getFile, getProjects } from '../../lib/content.mjs';
+import { renderMarkdown } from '../../lib/markdown.mjs';
+
+const projects = getProjects();
+const { data, body } = getFile('projects/index.md');
+const html = renderMarkdown(body, 'projects/index.md');
+---
+<Base title="Projects" source="projects/index.md">
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">Projects · measure → understand → scale → plan</span>
+      <h1 class="page-title">{data.title}</h1>
+      <p class="lede">One portfolio project per phase. Each builds on the last, and the capstone uses all of them.</p>
+    </div>
+  </section>
+
+  <div class="project-grid">
+    {projects.map((p) => (
+      <a class="project-card" href={p.href}>
+        <span class="code">{p.code}</span>
+        <span class="name">{p.name}</span>
+        <span>{p.pitch}</span>
+        <span class="meta"><span>PHASE {p.phase} · W{p.weeks}</span><span class={`chip ${p.status.key === 'done' ? 'done' : p.status.key === 'doing' ? 'active' : ''}`}>{p.status.glyph} {p.status.label}</span></span>
+      </a>
+    ))}
+  </div>
+
+  <div class="prose" set:html={html} />
+</Base>

@@ -1,0 +1,41 @@
+---
+// Every content/*.md file without its own template: resources, people, notes,
+// ongoing tracks, interview prep, mini-projects, archive, and any new file you add.
+import Base from '../layouts/Base.astro';
+import { genericPages, headings } from '../lib/content.mjs';
+import { renderMarkdown, slugify } from '../lib/markdown.mjs';
+
+export function getStaticPaths() {
+  return genericPages().map((p) => ({ params: { slug: p.slug || undefined }, props: p }));
+}
+const { path, slug, title, body } = Astro.props;
+const html = renderMarkdown(body, path);
+const toc = headings(body);
+const section = slug.split('/')[0];
+const sectionLabel: Record<string, string> = {
+  roadmap: 'Roadmap', notes: 'Notes', projects: 'Projects', archive: 'Archive',
+  resources: 'Reference', people: 'Reference',
+};
+---
+<Base title={title} source={path}>
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">{sectionLabel[section] || 'Page'} · {slug.replace(/\//g, ' / ')}</span>
+      <h1 class="page-title">{title}</h1>
+    </div>
+    {toc.length > 2 && (
+      <nav class="spec" aria-label="On this page">
+        <div class="spec-title">CONTENTS</div>
+        <dl>
+          {toc.map((h, i) => (
+            <>
+              <dt><a href={`#${slugify(h)}`} style="color:var(--ink);text-decoration:none">{h}</a></dt>
+              <dd>§{i + 1}</dd>
+            </>
+          ))}
+        </dl>
+      </nav>
+    )}
+  </section>
+  <div class="prose" set:html={html} />
+</Base>

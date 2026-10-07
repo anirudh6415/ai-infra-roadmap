@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import PhaseCards from '../../components/PhaseCards.astro';
+import Timeline from '../../components/Timeline.astro';
+import { SITE } from '../../config.mjs';
+import { getFile, getTotals, getAllWeeks } from '../../lib/content.mjs';
+import { renderMarkdown } from '../../lib/markdown.mjs';
+
+const { data, body } = getFile('roadmap/index.md');
+const html = renderMarkdown(body, 'roadmap/index.md');
+const totals = getTotals();
+const weeks = getAllWeeks();
+---
+<Base title="Roadmap" source="roadmap/index.md">
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">Roadmap · 4 phases · {weeks.length} weeks</span>
+      <h1 class="page-title">{data.title === 'Roadmap' ? 'The 52-week plan' : data.title}</h1>
+      <p class="lede">Every week has the same shape: learn on weekday mornings, build on Saturday, ship on Sunday. Checkboxes on each phase page drive every progress bar on this site.</p>
+    </div>
+    <div class="spec">
+      <div class="spec-title">PLAN SPECIFICATIONS</div>
+      <dl>
+        <dt>Start</dt><dd>{SITE.start}</dd>
+        <dt>Weeks</dt><dd>{weeks.length}</dd>
+        <dt>Light weeks</dt><dd>{weeks.filter((w) => w.light).length}</dd>
+        <dt>Tasks</dt><dd>{totals.done} / {totals.total}</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <span class="label">Phases</span>
+    <PhaseCards />
+  </section>
+
+  <Timeline />
+
+  <div class="prose" set:html={html} />
+</Base>

@@ -1,0 +1,32 @@
+---
+import { getAllWeeks, getPhases, scheduledWeek } from '../lib/content.mjs';
+const weeks = getAllWeeks();
+const phases = getPhases();
+const sched = scheduledWeek();
+---
+<div class="section">
+  <div class="section-head">
+    <span class="label">3 · Timing diagram · {weeks.length} weeks</span>
+    <span class="legend">
+      <span><i class="done"></i>done</span>
+      <span><i class="active"></i>current</span>
+      <span><i></i>ahead</span>
+      <span><i class="light"></i>light week</span>
+      {sched > 0 && <span>▁ calendar week {String(sched).padStart(2, '0')}</span>}
+    </span>
+  </div>
+  <div class="timeline" role="list">
+    {weeks.map((w) => (
+      <a
+        role="listitem"
+        href={w.href}
+        class={`tick ${w.status}${w.light ? ' light' : ''}${w.n === sched ? ' scheduled' : ''}`}
+        title={`${w.code} · ${w.title} · ${w.done}/${w.total}`}
+        aria-label={`${w.code} ${w.title}, ${w.done} of ${w.total} tasks`}
+      ></a>
+    ))}
+  </div>
+  <div class="timeline-axis">
+    {phases.map((p) => <span>PH{p.n} · {p.month}</span>)}
+  </div>
+</div>

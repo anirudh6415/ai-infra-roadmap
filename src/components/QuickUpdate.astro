@@ -1,0 +1,86 @@
+---
+import { SITE } from '../config.mjs';
+interface Props { week?: number }
+const { week } = Astro.props;
+---
+<form class="qu" id="qu-form" data-owner={SITE.owner} data-repo={SITE.repo} autocomplete="off">
+  <span class="prompt">$ log --week {week ? String(week).padStart(2, '0') : '__'}</span>
+  <div class="row2">
+    <div>
+      <label for="qu-week">week</label>
+      <input id="qu-week" name="week" type="number" min="1" max="60" value={week ?? ''} placeholder="1" />
+    </div>
+    <div>
+      <label for="qu-hours">hours</label>
+      <input id="qu-hours" name="hours" type="number" min="0" max="40" step="0.5" placeholder="2" />
+    </div>
+  </div>
+  <label for="qu-did">did (required)</label>
+  <textarea id="qu-did" name="did" rows="3" placeholder="What did you do?"></textarea>
+  <label for="qu-learned">learned</label>
+  <textarea id="qu-learned" name="learned" rows="2" placeholder="The one thing you'd explain to someone else"></textarea>
+  <label for="qu-next">next</label>
+  <input id="qu-next" name="next" type="text" placeholder="The very next step" />
+  <label for="qu-links">links</label>
+  <input id="qu-links" name="links" type="text" placeholder="Commit, notebook or post URLs (optional)" />
+  <div class="actions">
+    <button type="submit" class="primary">submit via github ↵</button>
+    <button type="button" id="qu-copy">copy markdown</button>
+    <button type="button" id="qu-clear">clear</button>
+  </div>
+  <p class="status" id="qu-status" role="status"></p>
+</form>
+
+<script>
+  // Builds a pre-filled GitHub issue (template quick-log.yml). The quick-log
+  // workflow turns it into a progress-log entry. Field names match the template ids.
+  const FIELDS = ['week', 'hours', 'did', 'learned', 'next', 'links'];
+  const KEY = 'air-quick-update-draft';
+  const form = document.getElementById('qu-form') as HTMLFormElement | null;
+
+  if (form) {
+    const status = document.getElementById('qu-status');
+    const say = (m: string) => { if (status) status.textContent = m; };
+    const field = (n: string) => form.elements.namedItem(n) as HTMLInputElement | null;
+    const values = () => Object.fromEntries(FIELDS.map((f) => [f, (field(f)?.value || '').trim()]));
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(values())); } catch {} };
+
+    try {
+      const draft = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (draft) for (const f of FIELDS) { const el = field(f); if (draft[f] && el) el.value = draft[f]; }
+    } catch {}
+
+    form.addEventListener('input', save);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = values();
+      if (!v.did) { say('Add at least one line under "did".'); field('did')?.focus(); return; }
+      const title = '[log] ' + (v.week ? `Week ${v.week}: ` : '') + v.did.split('\n')[0].slice(0, 60);
+      const params = new URLSearchParams({ template: 'quick-log.yml', title });
+      for (const f of FIELDS) if (v[f]) params.set(f, v[f]);
+      const href = `https://github.com/${form.dataset.owner}/${form.dataset.repo}/issues/new?${params}`;
+      window.open(href, '_blank', 'noopener');
+      say('GitHub opened in a new tab. Press "Submit new issue" there. The site updates in about a minute.');
+    });
+
+    document.getElementById('qu-copy')?.addEventListener('click', async () => {
+      const v = values();
+      const d = new Date();
+      const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const md = [
+        `## ${date}${v.week ? ' · Week ' + v.week : ''}`, '',
+        v.did && `**Did:** ${v.did}  `, v.learned && `**Learned:** ${v.learned}  `,
+        v.next && `**Next:** ${v.next}  `, v.hours && `**Hours:** ${v.hours}  `, v.links && `**Links:** ${v.links}`,
+      ].filter(Boolean).join('\n');
+      try { await navigator.clipboard.writeText(md); say('Copied as Markdown.'); }
+      catch { say('Copy failed. Select the text and copy it manually.'); }
+    });
+
+    document.getElementById('qu-clear')?.addEventListener('click', () => {
+      form.reset();
+      try { localStorage.removeItem(KEY); } catch {}
+      say('Cleared.');
+    });
+  }
+</script>

@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import QuickUpdate from '../components/QuickUpdate.astro';
+import { getCurrentWeek, getLog } from '../lib/content.mjs';
+
+const log = getLog();
+const week = getCurrentWeek();
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<Base title="Progress log" source="progress-log.md">
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">Progress log · newest first</span>
+      <h1 class="page-title">{log.title}</h1>
+      <p class="lede">One short entry per week using did, learned and next.</p>
+    </div>
+    <div class="spec">
+      <div class="spec-title">LOG SPECIFICATIONS</div>
+      <dl>
+        <dt>Entries</dt><dd>{log.entries.length}</dd>
+        <dt>Hours logged</dt><dd>{log.hours.toFixed(1)} h</dd>
+        <dt>Streak</dt><dd>{log.streak} wk</dd>
+        <dt>Latest</dt><dd>{log.entries[0]?.date || '—'}</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="grow">
+      <div class="entries">
+        {log.entries.map((e) => (
+          <article class="entry">
+            <div class="when"><b>{e.date}</b><span>{e.week ? 'WEEK ' + pad(Number(e.week)) : e.title}</span>{e.hours > 0 && <span>{e.hours} h</span>}</div>
+            <div class="what prose" set:html={e.html} />
+          </article>
+        ))}
+      </div>
+    </div>
+    <div class="side">
+      <QuickUpdate week={week?.n} />
+    </div>
+  </section>
+
+  <div class="prose" set:html={log.introHtml} />
+</Base>

@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getProjects, getPhases, headings } from '../../lib/content.mjs';
+import { renderMarkdown, slugify } from '../../lib/markdown.mjs';
+
+export function getStaticPaths() {
+  return getProjects().map((p) => ({ params: { slug: p.slug }, props: { slug: p.slug } }));
+}
+const { slug } = Astro.props;
+const p = getProjects().find((x) => x.slug === slug);
+const phase = getPhases().find((x) => x.n === p.phase);
+const html = renderMarkdown(p.body, p.file);
+const toc = headings(p.body);
+---
+<Base title={`${p.code} · ${p.name}`} source={p.file}>
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">Project {p.code} · Phase {p.phase}</span>
+      <h1 class="page-title">{p.name}</h1>
+      <p class="lede">{p.pitch}</p>
+    </div>
+    <div class="spec">
+      <div class="spec-title">PROJECT SPECIFICATIONS</div>
+      <dl>
+        <dt>Phase</dt><dd><a href={phase.href}>{phase.n} · {phase.short}</a></dd>
+        <dt>Weeks</dt><dd>{p.weeks}</dd>
+        <dt>Repo</dt><dd>{p.repo.href ? <a href={p.repo.href}>{p.repo.name}</a> : p.repo.name || '—'}</dd>
+        <dt>Status</dt><dd>{p.status.glyph} {p.status.label}</dd>
+        <dt>Phase progress</dt><dd>{phase.done}/{phase.total}</dd>
+      </dl>
+    </div>
+  </section>
+
+  {toc.length > 2 && (
+    <nav class="mono" style="font-size:12px;display:flex;flex-wrap:wrap;gap:4px 16px" aria-label="On this page">
+      {toc.map((h) => <a href={`#${slugify(h)}`}>§ {h}</a>)}
+    </nav>
+  )}
+
+  <div class="prose" set:html={html} />
+</Base>

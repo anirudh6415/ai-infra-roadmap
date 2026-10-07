@@ -1,0 +1,15 @@
+---
+import { getPhases } from '../lib/content.mjs';
+const phases = getPhases();
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<div class="phase-cards">
+  {phases.map((p) => (
+    <a class={`phase-card${p.active ? ' is-active' : ''}`} href={p.href}>
+      <span class="k">PH{p.n} · W{p.weeks[0] ? pad(p.weeks[0].n) : ''}–{p.weeks.at(-1) ? pad(p.weeks.at(-1).n) : ''} · {p.complete ? 'DONE' : p.active ? 'ACTIVE' : p.month}</span>
+      <span class="t">{p.title}</span>
+      <span class="bar-track"><span class="bar-fill" style={`display:block;width:${p.pct}%`}></span></span>
+      <span class="m num">{p.done}/{p.total} tasks · {p.projectShort}</span>
+    </a>
+  ))}
+</div>

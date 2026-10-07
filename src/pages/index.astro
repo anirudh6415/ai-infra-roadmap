@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+import PhaseCards from '../components/PhaseCards.astro';
+import Timeline from '../components/Timeline.astro';
+import WeekDetail from '../components/WeekDetail.astro';
+import QuickUpdate from '../components/QuickUpdate.astro';
+import { SITE } from '../config.mjs';
+import { getCurrentWeek, getFile, getLog, getSkills, getTotals, scheduledWeek, editUrl } from '../lib/content.mjs';
+import { renderMarkdown, url } from '../lib/markdown.mjs';
+
+const week = getCurrentWeek();
+const totals = getTotals();
+const skills = getSkills().counts;
+const log = getLog();
+const sched = scheduledWeek();
+const about = getFile('home.md');
+const aboutHtml = renderMarkdown(about.body, 'home.md');
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<Base source="home.md">
+  <section class="hero">
+    <div class="hero-text">
+      <span class="label">1 · General description</span>
+      <h1>{SITE.headline}</h1>
+      <p class="lede">{SITE.description}</p>
+    </div>
+    <div class="spec">
+      <div class="spec-title">KEY SPECIFICATIONS</div>
+      <dl>
+        <dt>Current week</dt><dd>{week ? week.code : '—'} / {SITE.totalWeeks}</dd>
+        <dt>Calendar week</dt><dd>{sched > 0 ? 'W' + pad(sched) : 'starts ' + SITE.start}</dd>
+        <dt>Tasks</dt><dd>{totals.done} / {totals.total} · {totals.pct}%</dd>
+        <dt>Skills ● / ◐ / ○</dt><dd>{skills.done} / {skills.doing} / {skills.todo}</dd>
+        <dt>Hours logged</dt><dd>{log.hours.toFixed(1)} h</dd>
+        <dt>Log entries · streak</dt><dd>{log.entries.length} · {log.streak} wk</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <span class="label">2 · Phase status</span>
+    <PhaseCards />
+  </section>
+
+  <Timeline />
+
+  {week && (
+    <section class="split">
+      <div class="grow">
+        <span class="label">4 · This week · {week.code} · {week.dates}</span>
+        <h2 class="week-title"><a href={week.href} style="text-decoration:none">{week.title}</a></h2>
+        <WeekDetail week={week} />
+        <p class="mono" style="margin:0;font-size:12px"><a href={editUrl(`roadmap/${week.phaseSlug}.md`)}>tick boxes on GitHub ↗</a> · <a href={week.href}>open in phase page →</a></p>
+      </div>
+      <div class="side">
+        <QuickUpdate week={week.n} />
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="section-head">
+      <span class="label">5 · Latest log</span>
+      <a class="mono" style="font-size:12px" href={url('/progress-log/')}>full log →</a>
+    </div>
+    <div class="entries">
+      {log.entries.slice(0, 3).map((e) => (
+        <div class="entry">
+          <div class="when"><b>{e.date}</b><span>{e.week ? 'WEEK ' + pad(Number(e.week)) : e.title}</span>{e.hours > 0 && <span>{e.hours} h</span>}</div>
+          <div class="what">{e.did}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <span class="label">6 · {about.data.title}</span>
+    <div class="prose" set:html={aboutHtml} />
+  </section>
+</Base>

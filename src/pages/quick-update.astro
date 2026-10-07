@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import QuickUpdate from '../components/QuickUpdate.astro';
+import { getCurrentWeek } from '../lib/content.mjs';
+import { url } from '../lib/markdown.mjs';
+
+const week = getCurrentWeek();
+---
+<Base title="Quick update">
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">Quick update · no files to edit</span>
+      <h1 class="page-title">Log progress</h1>
+      <p class="lede">Write the entry and press submit. GitHub opens with everything filled in; press <b>Submit new issue</b> there. About a minute later the entry is in the <a href={url('/progress-log/')}>progress log</a>, the README is refreshed and the issue closes itself.</p>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="side" style="flex: 1 1 420px; max-width: 560px">
+      <QuickUpdate week={week?.n} />
+    </div>
+    <div class="grow prose">
+      <div class="callout callout-tip"><p class="callout-title">Works from your phone</p><p>Bookmark this page on your home screen. You need to be signed in to GitHub in that browser, or have the GitHub app, for the final click.</p></div>
+      <h3 id="how-it-works">How it works</h3>
+      <p>GitHub Pages only serves static files, so this page can't save anything by itself. It builds a link to a pre-filled <em>Quick log</em> issue. When you submit it, the <code>quick-log</code> workflow:</p>
+      <ol>
+        <li>checks that the issue is yours and its title starts with <code>[log]</code> (anyone else's issue is ignored),</li>
+        <li>adds the entry to the top of <code>content/progress-log.md</code>,</li>
+        <li>refreshes the README progress block,</li>
+        <li>rebuilds and redeploys this site,</li>
+        <li>closes the issue with a ✅ comment.</li>
+      </ol>
+      <p>Your draft stays in this browser until you clear it. <b>Copy markdown</b> gives you the same entry to paste into GitBook.</p>
+    </div>
+  </section>
+</Base>

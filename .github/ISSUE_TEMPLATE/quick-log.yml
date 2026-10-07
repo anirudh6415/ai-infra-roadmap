@@ -1,0 +1,50 @@
+name: Quick log
+description: Add a progress-log entry without editing any files.
+title: "[log] "
+body:
+  - type: input
+    id: week
+    attributes:
+      label: Week
+      description: Roadmap week number (1–52). Leave blank if it doesn't map to a week.
+      placeholder: "1"
+    validations:
+      required: false
+  - type: textarea
+    id: did
+    attributes:
+      label: Did
+      description: What did you do? One to three lines is plenty.
+      placeholder: Got vLLM running on a Colab T4 and measured tokens/s for Qwen2.5-1.5B.
+    validations:
+      required: true
+  - type: textarea
+    id: learned
+    attributes:
+      label: Learned
+      description: The one thing you'd explain to someone else.
+      placeholder: Decode is memory-bandwidth bound, so batch size raises throughput almost for free until KV cache runs out.
+    validations:
+      required: false
+  - type: textarea
+    id: next
+    attributes:
+      label: Next
+      description: The very next step.
+      placeholder: Sweep concurrency 1→64 and plot throughput vs latency.
+    validations:
+      required: false
+  - type: input
+    id: hours
+    attributes:
+      label: Hours
+      placeholder: "2"
+    validations:
+      required: false
+  - type: input
+    id: links
+    attributes:
+      label: Links
+      description: Optional commit, notebook, chart or post URLs (comma-separated).
+    validations:
+      required: false

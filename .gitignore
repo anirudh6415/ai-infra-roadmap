@@ -1,0 +1,19 @@
+# Build output & dependencies
+dist/
+.astro/
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Never commit employer-internal notes, numbers or impact logs
+private/
+*.private.md
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/

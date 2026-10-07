@@ -1,0 +1,112 @@
+---
+import '@fontsource-variable/archivo/standard.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/ibm-plex-mono/600.css';
+import '../styles/global.css';
+import { NAV, SITE } from '../config.mjs';
+import { url } from '../lib/markdown.mjs';
+import { editUrl } from '../lib/content.mjs';
+import Sidebar from '../components/Sidebar.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  source?: string; // content/<source> for the "edit on GitHub" link
+}
+const { title, description = SITE.description, source } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
+const here = Astro.url.pathname.replace(/\/?$/, '/');
+const isActive = (href: string) => {
+  const full = url(href);
+  return href === '/' ? here === full : here.startsWith(full);
+};
+const built = new Date().toISOString().slice(0, 10);
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{pageTitle}</title>
+  <meta name="description" content={description}>
+  <meta property="og:title" content={pageTitle}>
+  <meta property="og:description" content={description}>
+  <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml">
+  <script is:inline>
+    try { const t = localStorage.getItem('air-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href={url('/')}>
+        <span class="pn">{SITE.partNumber}</span>
+        <span class="rev">AI INFRA ROADMAP · {SITE.rev} · {SITE.authorShort}</span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        {NAV.map((n) => (
+          <a href={url(n.href)} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a>
+        ))}
+        <a class="btn-log" href={url('/quick-update/')}>+ log progress</a>
+        <button class="icon-btn" type="button" id="theme-btn" aria-label="Switch light or dark theme">◐</button>
+        <button class="icon-btn menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="sidebar">~/menu</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="shell">
+    <Sidebar />
+    <main class="main" id="content">
+      <div class="main-inner">
+        <slot />
+        {source && (
+          <div class="page-foot">
+            <a href={editUrl(source)}>Edit this page on GitHub ↗</a>
+            <span>content/{source}</span>
+          </div>
+        )}
+      </div>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <span>Built in public by {SITE.author} · rebuilt {built}</span>
+    <nav aria-label="Elsewhere">
+      <a href={SITE.links.profile}>profile</a>
+      <a href={SITE.links.github}>github</a>
+      <a href={SITE.links.linkedin}>linkedin</a>
+      <a href={SITE.links.gitbook}>notes (gitbook)</a>
+    </nav>
+  </footer>
+
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      var btn = document.getElementById('theme-btn');
+      btn && btn.addEventListener('click', function () {
+        var dark = root.dataset.theme
+          ? root.dataset.theme === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var next = dark ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try { localStorage.setItem('air-theme', next); } catch (e) {}
+      });
+      var menu = document.getElementById('menu-btn');
+      menu && menu.addEventListener('click', function () {
+        var open = document.body.classList.toggle('nav-open');
+        menu.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      // Open the week named in the URL hash (e.g. #w03) on phase pages.
+      function openHash() {
+        var id = location.hash.slice(1);
+        if (!id) return;
+        var el = document.getElementById(id);
+        if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView({ block: 'start' }); }
+      }
+      window.addEventListener('hashchange', openHash);
+      openHash();
+    })();
+  </script>
+</body>
+</html>

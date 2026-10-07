@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeekDetail from '../../components/WeekDetail.astro';
+import { getPhases, editUrl } from '../../lib/content.mjs';
+import { url } from '../../lib/markdown.mjs';
+
+export function getStaticPaths() {
+  return getPhases().map((p) => ({ params: { phase: p.slug }, props: { slug: p.slug } }));
+}
+const { slug } = Astro.props;
+const phases = getPhases();
+const idx = phases.findIndex((p) => p.slug === slug);
+const p = phases[idx];
+const prev = phases[idx - 1];
+const next = phases[idx + 1];
+const pad = (n: number) => String(n).padStart(2, '0');
+const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', partial: 'STARTED', ahead: 'AHEAD' };
+---
+<Base title={`Phase ${p.n} · ${p.title}`} source={p.file}>
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">Phase {pad(p.n)} of {pad(phases.length)} · {statusLabel[p.status]}</span>
+      <h1 class="page-title">{p.title}</h1>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+        <span class="bar-track lg" style="flex:1"><span class="bar-fill" style={`display:block;width:${p.pct}%`}></span></span>
+        <span class="mono num" style="font-size:12px">{p.done} / {p.total} · {p.pct}%</span>
+      </div>
+    </div>
+    <div class="spec">
+      <div class="spec-title">PHASE SPECIFICATIONS</div>
+      <dl>
+        <dt>Weeks</dt><dd>{p.weeks.length ? `${pad(p.weeks[0].n)}–${pad(p.weeks.at(-1).n)}` : p.weeks}</dd>
+        <dt>Dates</dt><dd>{p.dates}</dd>
+        <dt>Project</dt><dd><a href={p.projectHref}>{p.projectShort}</a></dd>
+        <dt>Hardware</dt><dd>{p.hardware}</dd>
+      </dl>
+    </div>
+  </section>
+
+  <div class="prose" set:html={p.introHtml} />
+
+  <section class="section">
+    <div class="week-table-head"><span>WEEK</span><span>TOPIC</span><span>PROGRESS</span><span style="text-align:right">STATUS</span></div>
+    {p.weeks.map((w) => (
+      <details class={`week-row${w.current ? ' is-current' : ''}`} id={w.id} open={w.current}>
+        <summary>
+          <span class="wr-code">{w.code}</span>
+          <span style="min-width:0">
+            <span class="wr-title">{w.title}{w.tag && <span class="chip tag" style="margin-left:8px;vertical-align:2px">{w.tag.toUpperCase()}</span>}</span>
+            <span class="wr-sub">{w.summary}</span>
+          </span>
+          <span class="wr-prog"><span class="bar-track"><span class="bar-fill" style={`display:block;width:${w.pct}%`}></span></span><span class="num">{w.done}/{w.total}</span></span>
+          <span class={`chip ${w.status}`}>{statusLabel[w.status]}</span>
+        </summary>
+        <div class="wr-body">
+          <span class="mono muted" style="font-size:12px">{w.dates}</span>
+          <WeekDetail week={w} />
+        </div>
+      </details>
+    ))}
+  </section>
+
+  <p class="mono" style="margin:0;font-size:12px">
+    To tick a box, <a href={editUrl(p.file)}>edit this phase on GitHub ↗</a> and change <code>- [ ]</code> to <code>- [x]</code>.
+  </p>
+
+  <nav class="split" style="justify-content:space-between" aria-label="Phases">
+    {prev ? <a class="mono" href={prev.href}>← Phase {prev.n} · {prev.title}</a> : <a class="mono" href={url('/roadmap/')}>← Roadmap overview</a>}
+    {next ? <a class="mono" href={next.href}>Phase {next.n} · {next.title} →</a> : <a class="mono" href={url('/roadmap/interview-prep/')}>Interview prep →</a>}
+  </nav>
+</Base>

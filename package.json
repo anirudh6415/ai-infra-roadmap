@@ -1,0 +1,21 @@
+{
+  "name": "ai-infra-roadmap",
+  "private": true,
+  "type": "module",
+  "version": "2.0.0",
+  "description": "A 12-month public roadmap from AI capacity engineering to LLM inference & GPU performance engineering.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "astro": "^7.3.6",
+    "marked": "^18.1.0"
+  }
+}

@@ -1,0 +1,56 @@
+---
+import { getPhases, getProjects, notes } from '../lib/content.mjs';
+import { url } from '../lib/markdown.mjs';
+
+const phases = getPhases();
+const projects = getProjects();
+const noteList = notes();
+const here = Astro.url.pathname.replace(/\/?$/, '/');
+const cur = (href: string) => (here === href ? 'page' : undefined);
+const pages = [
+  { label: 'skills', href: url('/skills/') },
+  { label: 'resources', href: url('/resources/') },
+  { label: 'people', href: url('/people/') },
+  { label: 'progress log', href: url('/progress-log/') },
+  { label: 'quick update', href: url('/quick-update/') },
+  { label: 'archive', href: url('/archive/') },
+];
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<aside class="sidebar" id="sidebar" aria-label="Site tree">
+  <div class="tree-root">~/roadmap</div>
+  <a href={url('/roadmap/')} aria-current={cur(url('/roadmap/'))}>· overview &amp; calendar</a>
+  {phases.map((p) => (
+    <details open={p.active || here === p.href}>
+      <summary>{pad(p.n)} {p.short}</summary>
+      <div class="branch">
+        {p.weeks.map((w, i) => (
+          <a
+            href={w.href}
+            class={w.current ? 'week-current' : w.complete ? 'week-done' : undefined}
+            title={`${w.code} · ${w.title}`}
+          >{i === p.weeks.length - 1 ? '└─' : '├─'} {w.id} {w.title.toLowerCase()}{w.complete ? ' ✓' : w.current ? ' ●' : ''}</a>
+        ))}
+      </div>
+    </details>
+  ))}
+  <a href={url('/roadmap/ongoing/')} aria-current={cur(url('/roadmap/ongoing/'))}>· ongoing tracks</a>
+  <a href={url('/roadmap/interview-prep/')} aria-current={cur(url('/roadmap/interview-prep/'))}>· interview prep</a>
+
+  <div class="tree-root">~/projects</div>
+  {projects.map((p) => (
+    <a href={p.href} aria-current={cur(p.href)}>· {p.code.toLowerCase()} {p.slug.replace(/^p\d-/, '')} {p.status.glyph}</a>
+  ))}
+  <a href={url('/projects/mini-projects/')} aria-current={cur(url('/projects/mini-projects/'))}>· mini-projects</a>
+
+  <div class="tree-root">~/notes</div>
+  <a href={url('/notes/')} aria-current={cur(url('/notes/'))}>· index</a>
+  {noteList.map((n) => (
+    <a href={n.href} aria-current={cur(n.href)}>· {n.title.toLowerCase()}</a>
+  ))}
+
+  <div class="tree-root">~/pages</div>
+  {pages.map((p) => (
+    <a href={p.href} aria-current={cur(p.href)}>· {p.label}</a>
+  ))}
+</aside>

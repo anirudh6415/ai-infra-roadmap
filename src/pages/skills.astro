@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { getSkills } from '../lib/content.mjs';
+
+const s = getSkills();
+const pct = (n: number, d: number) => (d ? Math.round((100 * n) / d) : 0);
+const depthClass = (d: string) => (/deep/i.test(d) ? 'deep' : /working/i.test(d) ? 'working' : 'aware');
+---
+<Base title="Skills" source="skills.md">
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">Master skill list · {s.counts.total} skills</span>
+      <h1 class="page-title">{s.title}</h1>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+        <span class="bar-track lg" style="flex:1"><span class="bar-fill" style={`display:block;width:${pct(s.counts.done, s.counts.total)}%`}></span></span>
+        <span class="mono num" style="font-size:12px">{s.counts.done} / {s.counts.total} done</span>
+      </div>
+    </div>
+    <div class="spec">
+      <div class="spec-title">STATUS</div>
+      <dl>
+        <dt>● Done</dt><dd>{s.counts.done}</dd>
+        <dt>◐ In progress</dt><dd>{s.counts.doing}</dd>
+        <dt>○ Not started</dt><dd>{s.counts.todo}</dd>
+        <dt>Groups</dt><dd>{s.groups.length}</dd>
+      </dl>
+    </div>
+  </section>
+
+  <div class="prose" set:html={s.introHtml} />
+
+  {s.groups.map((g, i) => (
+    <section class="section">
+      <div class="group-head">
+        <h2><span class="label" style="margin-right:10px">{String(i + 1).padStart(2, '0')}</span>{g.name}</h2>
+        <span style="display:flex;align-items:center;gap:10px">
+          <span class="bar-track"><span class="bar-fill" style={`display:block;width:${pct(g.done, g.skills.length)}%`}></span></span>
+          <span class="mono num muted" style="font-size:12px">{g.done}/{g.skills.length}</span>
+        </span>
+      </div>
+      <div class="table-wrap" style="border-top:0">
+        <table class="skill-table">
+          <thead><tr><th>Skill</th><th>Depth</th><th>Phase</th><th class="dl">Done looks like</th><th style="text-align:right">Status</th></tr></thead>
+          <tbody>
+            {g.skills.map((k) => (
+              <tr>
+                <td set:html={k.name} />
+                <td><span class={`depth ${depthClass(k.depth)}`}>{k.depth}</span></td>
+                <td class="mono" style="font-size:12.5px">{k.phase}</td>
+                <td class="done-text" set:html={k.done} />
+                <td class="st"><span class={`chip ${k.status.key === 'done' ? 'done' : k.status.key === 'doing' ? 'active' : ''}`}>{k.status.glyph} {k.status.label}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+</Base>

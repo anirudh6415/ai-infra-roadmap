@@ -1,0 +1,28 @@
+---
+interface Props { week: any; source?: string }
+const { week } = Astro.props;
+const labels: Record<string, string> = { Learn: 'Learn · 30 min', Build: 'Build · Sat', Ship: 'Ship · Sun', Plan: 'Plan' };
+---
+{week.fields.length > 0 && (
+  <div class="fields">
+    {week.fields.map((f: any) => (
+      <>
+        <span class="f-label">{labels[f.label] || f.label}</span>
+        <span set:html={f.html} />
+      </>
+    ))}
+  </div>
+)}
+{week.tasks.length > 0 && (
+  <div>
+    <div class="label" style="color: var(--muted); margin-bottom: 8px">Done when · {week.done}/{week.total}</div>
+    <ul class="task-list">
+      {week.tasks.map((t: any) => (
+        <li class={t.done ? 'is-done' : undefined}>
+          <input type="checkbox" checked={t.done} disabled aria-label={t.done ? 'done' : 'not done'} />
+          <span set:html={t.html} />
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
