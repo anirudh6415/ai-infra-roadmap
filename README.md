@@ -39,6 +39,7 @@ I'm [Anirudh Iyengar K N](https://anirudh6415.github.io/), a Software Engineer I
 | [Resources](https://anirudh6415.github.io/ai-infra-roadmap/resources/) | Courses, books, papers, docs and repos, tagged by phase |
 | [People](https://anirudh6415.github.io/ai-infra-roadmap/people/) | Engineers, researchers and communities worth following |
 | [Progress log](https://anirudh6415.github.io/ai-infra-roadmap/progress-log/) | Weekly *did / learned / next* entries |
+| [Quick update](https://anirudh6415.github.io/ai-infra-roadmap/quick-update/) | Text boxes that log progress without editing files |
 
 ## The plan in one picture
 
@@ -55,7 +56,7 @@ Month 12+    Interview prep (inference system design + coding)
 
 ## How to update
 
-- **Log progress:** on the site, press **+ log progress** (visible only in a browser unlocked with my token). The entry is committed to `content/progress-log.md`, the site rebuilds and this README refreshes. Nobody else can log.
+- **Log progress:** use the [Quick update](https://anirudh6415.github.io/ai-infra-roadmap/quick-update/) page, or open a *Quick log* issue in the GitHub app. A workflow adds it to the log and refreshes this README.
 - **Tick a task:** edit the phase file in `content/roadmap/` on GitHub (press <kbd>.</kbd> for the web editor) and change `- [ ]` to `- [x]`. Every progress bar on the site updates from these.
 - **Change a skill's status:** edit the last column in `content/skills.md` (⬜ → 🟨 → ✅).
 - **Change a project's status:** edit the `Status:` line at the top of its file in `content/projects/`.

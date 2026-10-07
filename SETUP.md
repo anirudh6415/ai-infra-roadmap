@@ -17,7 +17,7 @@ git remote add origin https://github.com/anirudh6415/ai-infra-roadmap.git
 git push -u origin main
 ```
 
-> Using a different repo name or GitHub user? Change `owner`, `repo`, `base` and `origin` in **`src/config.mjs`**, and the URLs in `scripts/update_readme.py` and `README.md`.
+> Using a different repo name or GitHub user? Change `owner`, `repo`, `base` and `origin` in **`src/config.mjs`**, and the URLs in `scripts/update_readme.py`, `README.md` and `.github/ISSUE_TEMPLATE/config.yml`.
 
 ## 2. Turn on GitHub Pages
 
@@ -33,23 +33,15 @@ It's served under your `anirudh6415.github.io` domain but from its own repo, so 
 
 Repo → **Settings → Actions → General → Workflow permissions** → **Read and write permissions** → Save.
 
-## 4. Set up owner-only logging
+## 4. Test the Quick update flow
 
-Logging writes straight to the repo with a token only you hold, so nobody else can add entries and no issues are involved.
+1. Open the site → **+ log progress**.
+2. Type something in **did**, press **submit via github**.
+3. GitHub opens a pre-filled issue. Press **Submit new issue**.
+4. Watch the **Actions** tab: *Quick log → progress log* runs, commits, redeploys and closes the issue.
+5. After about a minute the entry appears on the homepage, the log page and the README.
 
-1. GitHub → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
-2. **Repository access:** *Only select repositories* → `ai-infra-roadmap`.
-3. **Permissions:** *Contents → Read and write*. Nothing else.
-4. Choose an expiry (e.g. 1 year), generate and copy it.
-5. Open `https://anirudh6415.github.io/ai-infra-roadmap/quick-update/`, paste the token, press **unlock**.
-6. The **+ log progress** button and the log boxes on the homepage and log page now appear **in this browser only**. Visitors never see them.
-7. Save a test entry. A commit lands in `content/progress-log.md`, the site rebuilds, and the entry shows up about a minute later.
-
-Repeat step 5 on your phone if you want to log from there. Press **lock** (or untick *remember on this device*) on shared computers. If a token leaks, revoke it on GitHub and it stops working immediately.
-
-## 5. Turn off Issues (optional)
-
-Logging no longer uses issues, so you can switch them off: **Settings → General → Features → untick Issues**. Delete any old test issues first if you like.
+Only issues **you** open with a title starting `[log]` are processed.
 
 ---
 
@@ -66,15 +58,15 @@ content/                 ← everything you write (plain Markdown)
 src/config.mjs           ← site name, repo, start date, phase & project metadata
 src/styles/global.css    ← the design (colour tokens at the top)
 src/pages, src/components, src/lib   ← templates and the Markdown parsers
-scripts/                 ← README updater (Python)
-.github/workflows/       ← build & deploy
+scripts/                 ← README updater + quick-log appender (Python)
+.github/workflows/       ← deploy + quick-log automation
 ```
 
 ## Day-to-day
 
 | I want to… | Do this |
 |---|---|
-| Log progress | **+ log progress** on the site (owner browser only) |
+| Log progress | **+ log progress** on the site, or a **Quick log** issue in the GitHub app |
 | Tick off a task | Open a phase page → *edit this phase on GitHub* → change `- [ ]` to `- [x]` |
 | Update a skill | Last column of `content/skills.md`: ⬜ → 🟨 → ✅ |
 | Update a project | `Status:` line at the top of `content/projects/<project>.md` |
@@ -102,11 +94,12 @@ Every push to `main` rebuilds the site and refreshes the README progress block.
 ## How the pieces fit
 
 ```text
-"+ log progress" (your token) ──▶ GitHub API commit to content/progress-log.md ─┐
-editing content/*.md on GitHub or locally ──▶ push ──────────────────────────────┤
-                                                                                 ▼
-                     deploy.yml ──▶ update_readme.py ──▶ commit README
-                                └─▶ npm run build (Astro) ──▶ GitHub Pages
+content/*.md ──push──▶ deploy.yml ──▶ update_readme.py ──▶ commit README
+                                  └─▶ npm run build (Astro) ──▶ GitHub Pages
+
+"+ log progress" ──▶ pre-filled "[log]" issue ──▶ quick-log.yml
+    └─▶ append_log.py (content/progress-log.md) ──▶ update_readme.py
+    └─▶ commit ──▶ close issue ──▶ deploy.yml
 ```
 
 ## Design
@@ -122,9 +115,7 @@ editing content/*.md on GitHub or locally ──▶ push ───────�
 |---|---|
 | Deploy fails with "Pages not enabled" | Step 2: set Pages source to **GitHub Actions** |
 | README commit fails with 403 | Step 3: enable read and write workflow permissions |
-| "Token belongs to …" on unlock | The token must be created from the repo owner's account |
-| "Can't write to the repo" on save | Token needs *Contents: Read and write* on `ai-infra-roadmap` |
-| Log form disappeared | Token expired or was revoked: create a new one and unlock again |
+| Quick log issue isn't processed | Title must start with `[log]` and be opened by the repo owner |
 | Deployment blocked by environment rules | Settings → Environments → `github-pages` → allow the `main` branch |
 | A week is missing from the phase page | Its heading must be `### Week N · Title` |
 | Build fails after editing | Check the Actions log; the error names the file. Usually an unclosed table row or heading pattern |
