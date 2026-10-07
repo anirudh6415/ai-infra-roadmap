@@ -6,7 +6,7 @@ body:
     id: week
     attributes:
       label: Week
-      description: Roadmap week number (1–52). Leave blank if it doesn't map to a week.
+      description: Roadmap week number (1–78). Leave blank if it doesn't map to a week.
       placeholder: "1"
     validations:
       required: false
@@ -51,6 +51,22 @@ body:
     attributes:
       label: Hours
       placeholder: "2"
+    validations:
+      required: false
+  - type: input
+    id: repo
+    attributes:
+      label: Mini-project repo
+      description: Optional. URL of this week's mini-project (repo, folder or notebook). It's linked from the week and the mini-project list.
+      placeholder: https://github.com/anirudh6415/llm-capacity-bench/tree/main/first-tokens
+    validations:
+      required: false
+  - type: input
+    id: project_repo
+    attributes:
+      label: Project repo
+      description: Optional. URL of this phase's project repo (set it once). It's shown on the project page.
+      placeholder: https://github.com/anirudh6415/llm-capacity-bench
     validations:
       required: false
   - type: input

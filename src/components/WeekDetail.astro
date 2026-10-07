@@ -18,6 +18,7 @@ const skills = skillsFor(week.n);
       <span class="f-label f-mini">Mini-project</span>
       <span class="f-mini-val">
         <a class="mini-link" href={week.mini.href}><code>{week.mini.name}</code></a>: {week.mini.desc}.
+        {week.mini.status === 'done' && <span class="shipped"> ✓ shipped</span>}
         {week.mini.repo && <> <a href={week.mini.repo}>repo ↗</a></>}
       </span>
     </>

@@ -138,6 +138,12 @@ export function getPhases() {
     w.current = w === current;
     w.status = w.complete ? 'done' : w.current ? 'active' : w.done > 0 ? 'partial' : 'ahead';
     w.pct = w.total ? Math.round((100 * w.done) / w.total) : 0;
+    if (w.mini) {
+      // The "Mini-project shipped: `name`" checkbox decides; without one, the week's tasks do.
+      const box = w.tasks.find((t) => /^mini-project shipped/i.test(t.text));
+      const shipped = box ? box.done : w.complete;
+      w.mini.status = shipped ? 'done' : w.done > 0 ? 'partial' : w.current ? 'active' : 'ahead';
+    }
   }
   for (const p of _phases) {
     p.active = p.weeks.some((w) => w.current);
@@ -354,12 +360,16 @@ export function getProjects() {
     const file = `projects/${p.slug}.md`;
     const { data, body } = getFile(file);
     const metaLine = (body.match(/^\*\*Phase[^\n]*$/m) || [''])[0];
-    const status = statusFromEmoji((metaLine.match(/Status:\s*(\S+)/) || [])[1] || '');
+    // Status is automatic: TODO until a task in the phase is ticked, ACTIVE while in
+    // progress, DONE when every task in the phase is ticked.
+    const ph = getPhases().find((x) => x.n === p.phase);
+    const status = !ph || ph.done === 0 ? STATUS[2] : ph.complete ? STATUS[0] : STATUS[1];
     const repoMd = (metaLine.match(/Repo:\s*(\[[^\]]+\]\([^)]+\)|`[^`]+`)/) || [])[1] || '';
     const repoLink = repoMd.match(/\[([^\]]+)\]\(([^)]+)\)/);
     return {
       ...p, file, title: data.title, status,
       repo: repoLink ? { name: repoLink[1], href: repoLink[2] } : { name: repoMd.replace(/`/g, ''), href: '' },
+      progress: ph ? { done: ph.done, total: ph.total, pct: ph.pct } : null,
       body: body.replace(metaLine, ''),
       href: url(`/projects/${p.slug}/`),
     };

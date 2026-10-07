@@ -28,6 +28,7 @@ title: "Phase 2 · Down to the GPU"
 
 - [ ] GPU Puzzles 1–6 solved
 - [ ] Memory hierarchy diagram with real numbers
+- [ ] Mini-project shipped: `gpu-memory-map`
 
 ### Week 15 · CUDA basics
 
@@ -41,6 +42,7 @@ title: "Phase 2 · Down to the GPU"
 - [ ] Vector add in CUDA, timed
 - [ ] Kernel time vs copy time explained
 - [ ] All GPU Puzzles solved
+- [ ] Mini-project shipped: `cuda-basics`
 
 ### Week 16 · Memory coalescing, shared memory, tiling
 
@@ -53,6 +55,7 @@ title: "Phase 2 · Down to the GPU"
 
 - [ ] Naive and tiled matmul both correct
 - [ ] GFLOP/s table vs cuBLAS
+- [ ] Mini-project shipped: `matmul-ladder`
 
 ### Week 17 · The roofline model
 
@@ -65,6 +68,7 @@ title: "Phase 2 · Down to the GPU"
 
 - [ ] Roofline chart for your GPU
 - [ ] At least 4 operations plotted, including LLM decode
+- [ ] Mini-project shipped: `roofline.py`
 
 ### Week 18 · GPU hardware generations (light week)
 
@@ -76,6 +80,7 @@ title: "Phase 2 · Down to the GPU"
 **Done when**
 
 - [ ] Tech-refresh comparison page written (in [Notes](../notes/index.md))
+- [ ] Mini-project shipped: `tech-refresh-brief`
 
 ### Week 19 · Profiling with PyTorch profiler and Nsight Systems
 
@@ -88,6 +93,7 @@ title: "Phase 2 · Down to the GPU"
 
 - [ ] Profile captured for prefill and decode
 - [ ] Top 5 kernels listed with % of time and whether each is compute- or memory-bound
+- [ ] Mini-project shipped: `where-time-goes`
 
 ### Week 20 · Nsight Compute
 
@@ -100,6 +106,7 @@ title: "Phase 2 · Down to the GPU"
 
 - [ ] `ncu` report captured and explained
 - [ ] One evidence-based optimization measured
+- [ ] Mini-project shipped: `ncu-tuning`
 
 ### Week 21 · Triton basics
 
@@ -113,6 +120,7 @@ title: "Phase 2 · Down to the GPU"
 - [ ] Tutorials 1–2 running
 - [ ] Half of Triton Puzzles solved
 - [ ] Fused softmax benchmarked
+- [ ] Mini-project shipped: `triton-softmax`
 
 ### Week 22 · Triton matmul and autotuning
 
@@ -125,6 +133,7 @@ title: "Phase 2 · Down to the GPU"
 
 - [ ] Triton matmul autotuned
 - [ ] Three-way comparison chart
+- [ ] Mini-project shipped: `triton-matmul`
 
 ### Week 23 · Your fused kernel
 
@@ -138,6 +147,7 @@ title: "Phase 2 · Down to the GPU"
 - [ ] Fused kernel matches PyTorch output (allclose test)
 - [ ] Benchmarked vs eager and torch.compile across input sizes
 - [ ] Placed on your roofline
+- [ ] Mini-project shipped: `fused-rmsnorm`
 
 ### Week 24 · torch.compile, CUDA Graphs and MFU
 
@@ -152,6 +162,7 @@ title: "Phase 2 · Down to the GPU"
 - [ ] torch.compile speedup measured
 - [ ] MFU computed by hand for training and decode
 - [ ] Benchmark runs tracked and compared in MLflow
+- [ ] Mini-project shipped: `mfu-calc`
 
 ### Week 25 · Serving techniques deep dive
 
@@ -165,6 +176,7 @@ title: "Phase 2 · Down to the GPU"
 - [ ] Prefix caching benchmarked on a shared-prefix workload
 - [ ] Speculative decoding benchmarked
 - [ ] Serving-engine comparison note
+- [ ] Mini-project shipped: `serving-tricks`
 
 ### Week 26 · Ship Project 2 + Linux performance basics
 
@@ -180,3 +192,4 @@ title: "Phase 2 · Down to the GPU"
 - [ ] Skill statuses updated
 - [ ] Phase 2 retro written
 - [ ] Coding practice started (see [ongoing tracks](ongoing.md))
+- [ ] Mini-project shipped: `P2 release`

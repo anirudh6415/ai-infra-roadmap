@@ -102,7 +102,7 @@ def render() -> str:
         START,
         f"**Current phase:** {current}  ",
         f"**Overall:** {bar(all_done, all_total)} ({all_done}/{all_total} tasks)  ",
-        f"**Skills:** ✅ {s_done} done · 🟨 {s_doing} in progress · ⬜ {s_todo} not started",
+        f"**Skills:** {s_done} done · {s_doing} active · {s_todo} todo",
         "",
         "| Phase | Progress | Tasks |",
         "|---|---|---|",

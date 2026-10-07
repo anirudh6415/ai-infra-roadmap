@@ -4,7 +4,7 @@ title: "P1 · LLM capacity bench"
 
 # P1 · LLM capacity bench
 
-**Phase 1 · Weeks 1–13** · Repo: `llm-capacity-bench` _(add link)_ · Status: ⬜
+**Phase 1 · Weeks 1–13** · Repo: `llm-capacity-bench` _(add link)_
 
 ## Goal
 

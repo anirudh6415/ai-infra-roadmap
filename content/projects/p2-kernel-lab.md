@@ -4,7 +4,7 @@ title: "P2 · Kernel lab"
 
 # P2 · Kernel lab
 
-**Phase 2 · Weeks 14–26** · Repo: `kernel-lab` _(add link)_ · Status: ⬜
+**Phase 2 · Weeks 14–26** · Repo: `kernel-lab` _(add link)_
 
 ## Goal
 

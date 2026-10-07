@@ -47,13 +47,13 @@ const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', pa
     </div>
     <div class="table-wrap" style="border-top:0">
       <table class="skill-table">
-        <thead><tr><th>Week</th><th>Topic</th><th>Mini-project</th><th style="text-align:right">Status</th></tr></thead>
+        <thead><tr><th>Week</th><th>Topic</th><th>Mini-project</th><th style="text-align:right">Week status</th></tr></thead>
         <tbody>
           {phase.weeks.map((w) => (
             <tr>
               <td class="mono" style="font-size:12.5px"><a href={w.href}>{w.code}</a></td>
               <td><a href={w.href} style="text-decoration:none;color:inherit">{w.title}</a></td>
-              <td>{w.mini ? <a class="mini-name" href={w.mini.href}>{w.mini.name}</a> : '—'}</td>
+              <td>{w.mini ? <><a class="mini-name" href={w.mini.href}>{w.mini.name}</a>{w.mini.status === 'done' && <span class="shipped"> ✓ shipped</span>}{w.mini.repo && <> · <a href={w.mini.repo}>repo ↗</a></>}</> : '—'}</td>
               <td class="st"><span class={`chip ${w.status}`}>{statusLabel[w.status]}</span></td>
             </tr>
           ))}

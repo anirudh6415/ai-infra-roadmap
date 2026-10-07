@@ -27,6 +27,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] KV transfer size per request computed for 2 models
 - [ ] Goodput model compares colocated vs disaggregated
 - [ ] Note: three conditions where disaggregation is worth it
+- [ ] Mini-project shipped: `pd-model.py`
 
 ### Week 54 · Prefill/decode disaggregation: hands-on
 
@@ -40,6 +41,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Disaggregated setup serving requests
 - [ ] Same workload benchmarked on both layouts
 - [ ] Measured results compared with the analytical model
+- [ ] Mini-project shipped: `pd-lab`
 
 ### Week 55 · KV-cache-aware routing
 
@@ -53,6 +55,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Simulator runs both routing policies
 - [ ] Cache-hit rate and TTFT compared
 - [ ] Note: what a capacity planner should assume about cache hits
+- [ ] Mini-project shipped: `kv-router-sim`
 
 ### Week 56 · KV cache offloading and tiering
 
@@ -66,6 +69,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Offloading configured and working
 - [ ] TTFT and memory compared with recompute
 - [ ] Break-even context length estimated
+- [ ] Mini-project shipped: `kv-offload-bench`
 
 ### Week 57 · Serving many LoRA adapters
 
@@ -79,6 +83,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Multiple adapters served from one base model
 - [ ] Throughput and memory measured at 3 adapter counts
 - [ ] Sizing rule written
+- [ ] Mini-project shipped: `multi-lora-bench`
 
 ### Week 58 · Long context and multimodal inputs
 
@@ -93,6 +98,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Max concurrency per GPU plotted vs context length
 - [ ] Image + text request cost measured on a vision-language model
 - [ ] Note on when context parallelism is needed
+- [ ] Mini-project shipped: `long-context-curves`
 
 ### Week 59 · Speculative decoding in depth
 
@@ -106,6 +112,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Speculation configured with at least one method
 - [ ] Speedup measured across concurrency levels
 - [ ] Crossover point identified
+- [ ] Mini-project shipped: `spec-decode-sweep`
 
 ### Week 60 · Embedding and reranker serving
 
@@ -119,6 +126,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Embedding model served and load-tested
 - [ ] Cost per 1M embeddings computed
 - [ ] GPU vs CPU recommendation written
+- [ ] Mini-project shipped: `embedding-bench`
 
 ### Week 61 · Non-LLM model serving
 
@@ -132,6 +140,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Model served by Triton Inference Server
 - [ ] At least 2 backends benchmarked
 - [ ] GPU-packing note written
+- [ ] Mini-project shipped: `triton-server-lab`
 
 ### Week 62 · Benchmarking methodology
 
@@ -145,6 +154,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Both load patterns run on the same setup
 - [ ] Tail latency differences explained
 - [ ] Benchmarking checklist written
+- [ ] Mini-project shipped: `loadgen-compare`
 
 ### Week 63 · Smaller models: compression and routing (light week)
 
@@ -158,6 +168,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Small vs large model scored on the same task
 - [ ] Cascade simulation with cost and quality
 - [ ] Note: when distillation or sparsity would beat routing
+- [ ] Mini-project shipped: `model-cascade-sim`
 
 ### Week 64 · Batch tiers and the planner (holiday week, light)
 
@@ -171,6 +182,7 @@ title: "Phase 5 · Serving at scale"
 - [ ] Planner models disaggregated layouts
 - [ ] Batch tier fills idle capacity in the plan
 - [ ] One comparison plan generated
+- [ ] Mini-project shipped: `planner-pd`
 
 ### Week 65 · Ship Project 5
 
@@ -184,3 +196,4 @@ title: "Phase 5 · Serving at scale"
 - [ ] Post published and shared
 - [ ] Skill statuses updated
 - [ ] Phase 5 retro written
+- [ ] Mini-project shipped: `P5 release`

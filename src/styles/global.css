@@ -400,11 +400,13 @@ li.task input, .task-list input { margin: 4px 0 0; accent-color: var(--accent); 
 
 /* anchor targets: rows highlighted when linked to */
 .skill-row { scroll-margin-top: 90px; }
-.skill-row:target { background: var(--surface-strong); box-shadow: inset 3px 0 0 var(--accent); }
-.skill-row:target td:first-child { padding-left: 10px; }
+.skill-row:target, .skill-row.is-target { background: var(--surface-strong); box-shadow: inset 3px 0 0 var(--accent); }
+.skill-row:target td:first-child, .skill-row.is-target td:first-child { padding-left: 10px; }
 .skill-table td.wk a { color: var(--ink); white-space: nowrap; }
 a.mini-name { text-decoration: none; }
 a.mini-name:hover { text-decoration: underline; }
 .mini-link code { color: var(--accent); font-weight: 600; }
 
 .prose a.wk-link { font-family: var(--font-mono); font-size: 0.92em; }
+
+.shipped { font-family: var(--font-mono); font-size: 11px; color: var(--accent); }

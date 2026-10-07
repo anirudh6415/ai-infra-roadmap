@@ -28,6 +28,7 @@ title: "Phase 3 · Scale out"
 
 - [ ] Memory predicted before the run and compared after
 - [ ] DDP run on 2 GPUs with throughput measured
+- [ ] Mini-project shipped: `ddp-2gpu`
 
 ### Week 28 · Collective communication and NCCL
 
@@ -40,6 +41,7 @@ title: "Phase 3 · Scale out"
 
 - [ ] All-reduce benchmark across message sizes
 - [ ] Bus bandwidth computed and compared with theory
+- [ ] Mini-project shipped: `allreduce-bench`
 
 ### Week 29 · FSDP and ZeRO
 
@@ -53,6 +55,7 @@ title: "Phase 3 · Scale out"
 - [ ] FSDP run working
 - [ ] A model that only fits with FSDP demonstrated
 - [ ] Comparison table written
+- [ ] Mini-project shipped: `ddp-vs-fsdp`
 
 ### Week 30 · Tensor and pipeline parallelism
 
@@ -65,6 +68,7 @@ title: "Phase 3 · Scale out"
 
 - [ ] TP=2 inference benchmarked vs TP=1
 - [ ] Communication overhead explained
+- [ ] Mini-project shipped: `tp-inference`
 
 ### Week 31 · Expert parallelism and MoE inference (light week)
 
@@ -76,6 +80,7 @@ title: "Phase 3 · Scale out"
 **Done when**
 
 - [ ] MoE sizing note written
+- [ ] Mini-project shipped: `moe-sizing`
 
 ### Week 32 · GPU topology and networking
 
@@ -88,6 +93,7 @@ title: "Phase 3 · Scale out"
 
 - [ ] Topology output read and explained for at least 2 machines
 - [ ] Layout decision note written
+- [ ] Mini-project shipped: `topology-reader`
 
 ### Week 33 · Checkpointing
 
@@ -101,6 +107,7 @@ title: "Phase 3 · Scale out"
 - [ ] DCP save and resume working
 - [ ] Save/load time measured
 - [ ] Interval calculated with the Young/Daly formula
+- [ ] Mini-project shipped: `dcp-checkpoint`
 
 ### Week 34 · Fault tolerance and goodput
 
@@ -114,6 +121,7 @@ title: "Phase 3 · Scale out"
 - [ ] Failure injected and recovered
 - [ ] Lost time measured for 2 checkpoint intervals
 - [ ] Goodput chart
+- [ ] Mini-project shipped: `failure-injector`
 
 ### Week 35 · Slurm
 
@@ -127,6 +135,7 @@ title: "Phase 3 · Scale out"
 - [ ] Slurm cluster running locally
 - [ ] Batch job and job array submitted
 - [ ] Cheat sheet written
+- [ ] Mini-project shipped: `slurm-lab`
 
 ### Week 36 · Ray
 
@@ -139,6 +148,7 @@ title: "Phase 3 · Scale out"
 
 - [ ] Ray Train run working
 - [ ] Comparison note written
+- [ ] Mini-project shipped: `ray-train-lab`
 
 ### Week 37 · Distributed storage and data loading
 
@@ -151,6 +161,7 @@ title: "Phase 3 · Scale out"
 
 - [ ] Checkpoint I/O measured
 - [ ] Data loader bottleneck test done
+- [ ] Mini-project shipped: `ckpt-io-bench`
 
 ### Week 38 · Training capacity math
 
@@ -163,6 +174,7 @@ title: "Phase 3 · Scale out"
 
 - [ ] Training capacity calculator built
 - [ ] Checked against at least one published number
+- [ ] Mini-project shipped: `training_capacity.py`
 
 ### Week 39 · Ship Project 3
 
@@ -176,3 +188,4 @@ title: "Phase 3 · Scale out"
 - [ ] Post published and shared
 - [ ] Skill statuses updated
 - [ ] Phase 3 retro written
+- [ ] Mini-project shipped: `P3 release`

@@ -28,6 +28,7 @@ title: "Phase 1 · Inference & GPU memory"
 - [ ] First Quick update logged from the site
 - [ ] vLLM generates text on a free GPU and you've written down tokens/s
 - [ ] `llm-capacity-bench` repo created
+- [ ] Mini-project shipped: `first-tokens`
 
 ### Week 2 · Prefill vs decode
 
@@ -41,6 +42,7 @@ title: "Phase 1 · Inference & GPU memory"
 - [ ] TTFT vs prompt length chart
 - [ ] TPOT at batch 1 measured, and compared with *(model bytes ÷ GPU memory bandwidth)*
 - [ ] Note written: "Why decode is memory-bandwidth bound"
+- [ ] Mini-project shipped: `prefill-vs-decode`
 
 ### Week 3 · KV cache math and PagedAttention
 
@@ -54,6 +56,7 @@ title: "Phase 1 · Inference & GPU memory"
 - [ ] `kv_calc.py` works for at least 4 models
 - [ ] Your number matches vLLM's reported KV cache capacity (within ~10%)
 - [ ] You can explain why GQA matters for capacity
+- [ ] Mini-project shipped: `kv_calc.py`
 
 ### Week 4 · Batching and the throughput/latency knee
 
@@ -69,6 +72,7 @@ title: "Phase 1 · Inference & GPU memory"
 - [ ] Throughput vs p95 latency chart with the knee marked
 - [ ] One paragraph explaining what limits throughput beyond the knee
 - [ ] vLLM served from its official Docker image
+- [ ] Mini-project shipped: `batching-knee`
 
 ### Week 5 · Model architecture literacy (light week)
 
@@ -81,6 +85,7 @@ title: "Phase 1 · Inference & GPU memory"
 
 - [ ] Table comparing 5 architectures: params, active params, KV bytes/token
 - [ ] Post outline drafted
+- [ ] Mini-project shipped: `arch-table`
 
 ### Week 6 · Quantization: speed *and* quality
 
@@ -94,6 +99,7 @@ title: "Phase 1 · Inference & GPU memory"
 - [ ] Throughput and memory for at least 2 precisions
 - [ ] Accuracy for the same precisions on at least 1 eval task
 - [ ] Recommendation written: when you'd accept the quality loss
+- [ ] Mini-project shipped: `quant-shootout`
 
 ### Week 7 · PyTorch GPU memory
 
@@ -106,6 +112,7 @@ title: "Phase 1 · Inference & GPU memory"
 
 - [ ] Memory snapshot captured and explained
 - [ ] Peak memory reduced and measured with at least 2 techniques
+- [ ] Mini-project shipped: `memory-snapshot`
 
 ### Week 8 · GPU observability: why "utilization" lies
 
@@ -121,6 +128,7 @@ title: "Phase 1 · Inference & GPU memory"
 - [ ] Note: which DCGM metrics you'd put on a capacity dashboard and why
 - [ ] Tokens per joule computed at each concurrency level
 - [ ] kind cluster running and the Kubernetes Basics modules done
+- [ ] Mini-project shipped: `gpu-metrics-logger`
 
 ### Week 9 · SLIs and SLOs for LLM serving
 
@@ -133,6 +141,7 @@ title: "Phase 1 · Inference & GPU memory"
 
 - [ ] Goodput computed for every concurrency level
 - [ ] Max goodput operating point identified
+- [ ] Mini-project shipped: `goodput-calc`
 
 ### Week 10 · Autoscaling and cold starts
 
@@ -147,6 +156,7 @@ title: "Phase 1 · Inference & GPU memory"
 - [ ] Cold-start time measured for at least 2 model sizes
 - [ ] Autoscaling policy sketched (metric, thresholds, minimum replicas)
 - [ ] Small model served from vLLM on kind, start time measured
+- [ ] Mini-project shipped: `cold-start-timer`
 
 ### Week 11 · LLM gateways and token economics (holiday week, light)
 
@@ -159,6 +169,7 @@ title: "Phase 1 · Inference & GPU memory"
 
 - [ ] Cost per 1M input and output tokens computed from your own benchmarks
 - [ ] Break-even point vs an API price written down
+- [ ] Mini-project shipped: `cost.py`
 
 ### Week 12 · Queueing basics (holiday week, light)
 
@@ -171,6 +182,7 @@ title: "Phase 1 · Inference & GPU memory"
 
 - [ ] Little's law check against measured data
 - [ ] `gpus_needed(rps, prompt_len, output_len, slo)` implemented
+- [ ] Mini-project shipped: `gpus_needed()`
 
 ### Week 13 · Ship Project 1
 
@@ -188,3 +200,4 @@ title: "Phase 1 · Inference & GPU memory"
 - [ ] Skill statuses updated in the [skill list](../skills.md)
 - [ ] Phase 1 retro written in the progress log
 - [ ] CI workflow running tests on every push
+- [ ] Mini-project shipped: `P1 release`

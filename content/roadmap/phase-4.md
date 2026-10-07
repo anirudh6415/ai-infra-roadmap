@@ -27,6 +27,7 @@ title: "Phase 4 · Platform & economics"
 - [ ] Cluster running with schedulable (fake or real) GPUs
 - [ ] GPU pods scheduled using labels and tolerations
 - [ ] Scheduling path diagram
+- [ ] Mini-project shipped: `kind-gpu-lab`
 
 ### Week 41 · GPU sharing: MIG, time-slicing, MPS
 
@@ -39,6 +40,7 @@ title: "Phase 4 · Platform & economics"
 
 - [ ] Sharing configured and tested
 - [ ] Decision matrix written
+- [ ] Mini-project shipped: `gpu-sharing-matrix`
 
 ### Week 42 · Batch scheduling and multi-tenancy
 
@@ -53,6 +55,7 @@ title: "Phase 4 · Platform & economics"
 - [ ] Preemption demonstrated
 - [ ] DRA explained in a note
 - [ ] Isolation note: what each sharing method protects against
+- [ ] Mini-project shipped: `kueue-tenants`
 
 ### Week 43 · Inference on Kubernetes and distributed tracing
 
@@ -68,6 +71,7 @@ title: "Phase 4 · Platform & economics"
 - [ ] One request traced end to end
 - [ ] Serving design doc written
 - [ ] A serving stack installed and inspected with Helm
+- [ ] Mini-project shipped: `keda-autoscale`
 
 ### Week 44 · Terraform (light week)
 
@@ -79,6 +83,7 @@ title: "Phase 4 · Platform & economics"
 **Done when**
 
 - [ ] VM created and destroyed with Terraform
+- [ ] Mini-project shipped: `terraform-gpu-vm`
 
 ### Week 45 · FinOps for AI
 
@@ -91,6 +96,7 @@ title: "Phase 4 · Platform & economics"
 
 - [ ] Cost allocation module working
 - [ ] Idle-cost note written
+- [ ] Mini-project shipped: `cost-allocator`
 
 ### Week 46 · Linear and mixed-integer programming
 
@@ -103,6 +109,7 @@ title: "Phase 4 · Platform & economics"
 
 - [ ] Toy allocation MIP solves correctly
 - [ ] Results explained (which constraints bind)
+- [ ] Mini-project shipped: `gpu-alloc-mip`
 
 ### Week 47 · Forecasting and simulation
 
@@ -115,6 +122,7 @@ title: "Phase 4 · Platform & economics"
 
 - [ ] SimPy simulation of a GPU pool
 - [ ] Simulated vs analytical latency compared
+- [ ] Mini-project shipped: `gpu-pool-sim`
 
 ### Week 48 · Agentic workload modeling and MCP
 
@@ -128,6 +136,7 @@ title: "Phase 4 · Platform & economics"
 - [ ] MCP server working with an agent loop
 - [ ] Token and step distribution measured
 - [ ] Agent workload profile defined
+- [ ] Mini-project shipped: `agent-profiler`
 
 ### Week 49 · Capstone build 1: planner core
 
@@ -139,6 +148,7 @@ title: "Phase 4 · Platform & economics"
 
 - [ ] Planner returns a plan for a sample workload
 - [ ] Unit tests for the capacity curves and solver
+- [ ] Mini-project shipped: `planner-core`
 
 ### Week 50 · Capstone build 2: agents, Kubernetes placement, UI
 
@@ -151,6 +161,7 @@ title: "Phase 4 · Platform & economics"
 - [ ] Agentic workloads supported
 - [ ] Placement recommendations included
 - [ ] UI working
+- [ ] Mini-project shipped: `planner-ui`
 
 ### Week 51 · Capstone build 3: MCP tool and write-up
 
@@ -162,6 +173,7 @@ title: "Phase 4 · Platform & economics"
 
 - [ ] Planner available as an MCP tool
 - [ ] Demo video recorded
+- [ ] Mini-project shipped: `planner-mcp`
 
 ### Week 52 · Ship the capstone and look back
 
@@ -175,3 +187,4 @@ title: "Phase 4 · Platform & economics"
 - [ ] Profile site, resume and LinkedIn updated
 - [ ] Year retro written
 - [ ] Interview prep plan started
+- [ ] Mini-project shipped: `P4 release`

@@ -9,17 +9,17 @@ Optimizing AI workloads, from GPU kernels to fleet capacity.
 
 <!-- AUTO:START -->
 **Current phase:** Phase 1 · Inference & GPU memory  
-**Overall:** `░░░░░░░░░░░░░░░░░░░░`   0% (0/214 tasks)  
-**Skills:** ✅ 0 done · 🟨 0 in progress · ⬜ 85 not started
+**Overall:** `░░░░░░░░░░░░░░░░░░░░`   0% (0/292 tasks)  
+**Skills:** 0 done · 0 active · 85 todo
 
 | Phase | Progress | Tasks |
 |---|---|---|
-| [Phase 1 · Inference & GPU memory](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-1/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/40 |
-| [Phase 2 · Down to the GPU](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-2/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/33 |
-| [Phase 3 · Scale out](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-3/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/31 |
-| [Phase 4 · Platform & economics](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-4/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/34 |
-| [Phase 5 · Serving at scale](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-5/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/41 |
-| [Phase 6 · Training & fleet operations](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-6/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/35 |
+| [Phase 1 · Inference & GPU memory](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-1/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/53 |
+| [Phase 2 · Down to the GPU](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-2/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/46 |
+| [Phase 3 · Scale out](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-3/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/44 |
+| [Phase 4 · Platform & economics](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-4/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/47 |
+| [Phase 5 · Serving at scale](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-5/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/54 |
+| [Phase 6 · Training & fleet operations](https://anirudh6415.github.io/ai-infra-roadmap/roadmap/phase-6/) | `░░░░░░░░░░░░░░░░░░░░`   0% | 0/48 |
 
 **Latest progress**
 
@@ -59,7 +59,7 @@ Month 12+    Interview prep, light alongside Phases 5-6; full focus when applyin
 
 - **Log progress:** press **+ log progress** on the site (or open a *Quick log* issue in the GitHub app) and tick the tasks you finished. A workflow adds the entry to the log, ticks those tasks on the roadmap and refreshes this README. `[log]` issues from anyone but the repo owner are closed automatically and never logged.
 - **Tick a task without logging:** edit the phase file in `content/roadmap/` on GitHub (press <kbd>.</kbd> for the web editor) and change `- [ ]` to `- [x]`. Every progress bar on the site updates from these.
-- **Change a skill's status:** edit the last column in `content/skills.md` (⬜ → 🟨 → ✅).
-- **Change a project's status:** edit the `Status:` line at the top of its file in `content/projects/`.
+- **Skills track themselves too.** A skill goes from TODO to ACTIVE when you tick any task in the weeks that teach it, and to DONE when all of those tasks are ticked.
+- **Projects and mini-projects track themselves.** Each week's last task is *Mini-project shipped*; ticking it marks that mini-project SHIPPED. A project shows TODO, ACTIVE or DONE from the ticks in its phase. To link a repo, paste the URL into the log form's *mini-project repo* or *project repo* field.
 
 All content is plain Markdown in `content/`. The site is built with [Astro](https://astro.build/) in a datasheet design with a terminal-style dark mode. Setup and maintenance details are in [SETUP.md](SETUP.md).

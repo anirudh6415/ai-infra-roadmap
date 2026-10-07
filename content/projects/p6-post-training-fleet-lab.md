@@ -4,7 +4,7 @@ title: "P6 · Post-training & fleet health lab"
 
 # P6 · Post-training & fleet health lab
 
-**Phase 6 · Weeks 66–78** · Repo: `post-training-fleet-lab` _(add link)_ · Status: ⬜
+**Phase 6 · Weeks 66–78** · Repo: `post-training-fleet-lab` _(add link)_
 
 ## Goal
 

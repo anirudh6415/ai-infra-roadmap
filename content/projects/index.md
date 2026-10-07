@@ -6,7 +6,7 @@ title: Projects
 
 Six portfolio projects, one per phase, each building on the last. The first four tell one story, **measure → understand → scale → plan**; Phases 5 and 6 take it to fleet scale: **serve at scale → train and operate**.
 
-The project cards above are generated from each project page. Change a project's status in the `Status:` line at the top of its page (⬜ → 🟨 → ✅).
+Project status is automatic: **TODO** until any task in its phase is ticked, **ACTIVE** while the phase is in progress, **DONE** when every task in the phase is ticked. Mini-projects show **SHIPPED** when their *Mini-project shipped* box is ticked. Repo links can be added from the log form.
 
 ## Every project page has
 

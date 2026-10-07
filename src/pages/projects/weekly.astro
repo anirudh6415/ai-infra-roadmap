@@ -7,15 +7,15 @@ import { getPhases } from '../../lib/content.mjs';
 const phases = getPhases();
 const all = phases.flatMap((p) => p.weeks);
 const withMini = all.filter((w) => w.mini);
-const shipped = withMini.filter((w) => w.complete).length;
-const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', partial: 'STARTED', ahead: 'AHEAD' };
+const shipped = withMini.filter((w) => w.mini.status === 'done').length;
+const statusLabel: Record<string, string> = { done: 'SHIPPED', active: 'THIS WEEK', partial: 'STARTED', ahead: 'AHEAD' };
 ---
 <Base title="Weekly mini-projects">
   <section class="page-head">
     <div class="hero-text">
       <span class="label">Projects · one per week</span>
       <h1 class="page-title">{withMini.length} weekly mini-projects</h1>
-      <p class="lede">Every week ships one small, named thing: a script, a chart, a kernel or a note. They add up to the phase projects. A mini-project counts as shipped when all of its week's tasks are ticked. To link a repo, write the name as a link in the phase file: <code>- **Mini-project:** [`name`](https://github.com/…): what you ship.</code></p>
+      <p class="lede">Every week ships one small, named thing: a script, a chart, a kernel or a note. They add up to the phase projects. A mini-project shows DONE when its <em>Mini-project shipped</em> box is ticked (tick it in the log form). Add a repo link from the log form's <em>mini-project repo</em> field.</p>
     </div>
     <div class="spec">
       <div class="spec-title">MINI-PROJECTS</div>
@@ -43,7 +43,7 @@ const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', pa
                 <td><a class="mini-name" href={w.href}>{w.mini.name}</a></td>
                 <td class="done-text">{w.mini.desc}</td>
                 <td class="mono" style="font-size:12px">{w.mini.repo ? <a href={w.mini.repo}>repo ↗</a> : <span class="muted">add later</span>}</td>
-                <td class="st"><span class={`chip ${w.status}`}>{statusLabel[w.status]}</span></td>
+                <td class="st"><span class={`chip ${w.mini.status}`}>{statusLabel[w.mini.status]}</span></td>
               </tr>
             ))}
           </tbody>

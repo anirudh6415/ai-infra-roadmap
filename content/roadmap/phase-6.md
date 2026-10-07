@@ -27,6 +27,7 @@ title: "Phase 6 · Training & fleet operations"
 - [ ] Same model trained in BF16 and FP8
 - [ ] Step time, memory and loss compared
 - [ ] Recommendation written
+- [ ] Mini-project shipped: `fp8-train-bench`
 
 ### Week 67 · Large-scale training frameworks
 
@@ -39,6 +40,7 @@ title: "Phase 6 · Training & fleet operations"
 
 - [ ] Model trained with 2 frameworks
 - [ ] Decision matrix written
+- [ ] Mini-project shipped: `framework-matrix`
 
 ### Week 68 · Memory techniques for big models
 
@@ -51,6 +53,7 @@ title: "Phase 6 · Training & fleet operations"
 
 - [ ] Planner covers recompute, sequence parallelism and MoE
 - [ ] Two example plans produced
+- [ ] Mini-project shipped: `train-memory-planner`
 
 ### Week 69 · Fine-tuning infrastructure
 
@@ -64,6 +67,7 @@ title: "Phase 6 · Training & fleet operations"
 - [ ] QLoRA fine-tune completed
 - [ ] Memory, time and cost recorded
 - [ ] Sizing table written
+- [ ] Mini-project shipped: `finetune-sizer`
 
 ### Week 70 · Data loading at scale (light week)
 
@@ -76,6 +80,7 @@ title: "Phase 6 · Training & fleet operations"
 
 - [ ] Both data pipelines benchmarked
 - [ ] GPU idle time compared
+- [ ] Mini-project shipped: `dataloader-bench`
 
 ### Week 71 · RL post-training infrastructure
 
@@ -89,6 +94,7 @@ title: "Phase 6 · Training & fleet operations"
 - [ ] GRPO run completed on a small model
 - [ ] Generation vs training time measured
 - [ ] Note on colocated vs separate generation GPUs
+- [ ] Mini-project shipped: `grpo-mini`
 
 ### Week 72 · Capacity for RL post-training
 
@@ -101,6 +107,7 @@ title: "Phase 6 · Training & fleet operations"
 
 - [ ] Split model built from measured numbers
 - [ ] Two scenarios planned
+- [ ] Mini-project shipped: `rl-capacity-model`
 
 ### Week 73 · GPU health and failures
 
@@ -114,6 +121,7 @@ title: "Phase 6 · Training & fleet operations"
 - [ ] Health checker runs on at least one GPU machine
 - [ ] Common XID errors mapped to actions
 - [ ] Runbook written
+- [ ] Mini-project shipped: `gpu-health-checker`
 
 ### Week 74 · Fleet reliability and spares
 
@@ -126,6 +134,7 @@ title: "Phase 6 · Training & fleet operations"
 
 - [ ] Spares model built
 - [ ] Three fleet sizes analysed
+- [ ] Mini-project shipped: `spares-calc`
 
 ### Week 75 · Buying GPU capacity, and power
 
@@ -139,6 +148,7 @@ title: "Phase 6 · Training & fleet operations"
 - [ ] TCO model built for two workloads, including power cost
 - [ ] Effect of a power cap on tokens/s and tokens per joule estimated or measured
 - [ ] Recommendation written for each
+- [ ] Mini-project shipped: `cloud-gpu-tco`
 
 ### Week 76 · TPUs and JAX
 
@@ -152,6 +162,7 @@ title: "Phase 6 · Training & fleet operations"
 - [ ] JAX code running on a TPU
 - [ ] TPU roofline plotted next to your GPU's
 - [ ] TPU vs GPU note written
+- [ ] Mini-project shipped: `tpu-first-steps`
 
 ### Week 77 · AMD GPUs and other accelerators
 
@@ -165,6 +176,7 @@ title: "Phase 6 · Training & fleet operations"
 - [ ] Accelerator matrix covers at least 4 platforms
 - [ ] Software-maturity notes per platform (serving engine and kernel support)
 - [ ] One measured run on non-NVIDIA hardware, or a written reason why not
+- [ ] Mini-project shipped: `accelerator-matrix`
 
 ### Week 78 · Ship Project 6 and look back
 
@@ -178,3 +190,4 @@ title: "Phase 6 · Training & fleet operations"
 - [ ] Post published and shared
 - [ ] Profile site, resume and LinkedIn updated
 - [ ] 18-month retro written
+- [ ] Mini-project shipped: `P6 release`

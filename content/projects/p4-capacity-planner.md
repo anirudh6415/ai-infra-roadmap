@@ -4,7 +4,7 @@ title: "P4 · GPU capacity planner (capstone)"
 
 # P4 · GPU capacity planner (capstone)
 
-**Phase 4 · Weeks 40–52** (core build Weeks 46–51) · Repo: `gpu-capacity-planner` _(add link)_ · Status: ⬜
+**Phase 4 · Weeks 40–52** (core build Weeks 46–51) · Repo: `gpu-capacity-planner` _(add link)_
 
 ## Goal
 

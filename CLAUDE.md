@@ -28,7 +28,7 @@ content/                   all writing (Markdown)
   roadmap/index.md         calendar, topic map, compute, parking lot
   roadmap/ongoing.md       Foundations track, learn-through-work, coding, writing
   roadmap/interview-prep.md
-  projects/p1..p6-*.md     project specs (Status: line at the top)
+  projects/p1..p6-*.md     project specs (meta line at the top; status is computed)
   projects/index.md, projects/mini-projects.md (extra, optional)
   resources.md             resources by phase, incl. "AI study prompts"
   radar.md                 tool radar by category
@@ -43,7 +43,8 @@ src/pages/                 index, roadmap/[phase], roadmap/index, skills, projec
 src/components/            Sidebar, PhaseCards, Timeline, WeekDetail, QuickUpdate
 src/styles/global.css      design tokens + all styles
 scripts/update_readme.py   rewrites the README block between <!-- AUTO:START/END -->
-scripts/append_log.py      quick-log issue → log entry + ticks tasks
+scripts/append_log.py      quick-log issue → log entry + ticks tasks + repo links
+scripts/sync_skills.py     skill Status column from roadmap ticks
 .github/workflows/         deploy.yml (build + Pages), quick-log.yml (issues → log)
 .github/ISSUE_TEMPLATE/quick-log.yml
 ```
@@ -59,23 +60,24 @@ scripts/append_log.py      quick-log issue → log entry + ticks tasks
 - **Build:** …
 - **Ship:** …
 - **Foundations:** …            (optional)
-- **Mini-project:** `name`: what you ship.   (or [`name`](repo-url): … to link a repo)
+- **Mini-project:** `name`: what you ship.   (the log form's repo field turns it into [`name`](url))
 
 **Done when**
 
 - [ ] task
 - [x] finished task
+- [ ] Mini-project shipped: `name`   (always the last task; ticking it marks the mini-project SHIPPED)
 ```
 
 - The heading must be `### Week N · Title`. A `(light …)` or `(holiday …)` suffix shows the week as hatched on the timeline.
 - Task IDs are `W<week>.<n>` (n = order of the checkbox within the week). The log form and `append_log.py` use them, with the task text as a fallback.
 - Week numbers continue across phases (Phase 5 starts at 53).
 
-**Skills** (`content/skills.md`): `| Skill | Depth | Weeks | Done looks like | Learn from | Status |`. **Weeks** lists the weeks that teach the skill (`W03`, `W01–W04, W25`, `W26 onward`); each listed week shows the skill in its **Skills** row, and the skills page links back to those weeks. Every week should map to at least one skill. **Status must stay the last column** (⬜ / 🟨 / ✅). Depth uses `<span class="badge deep|working|aware">`.
+**Skills** (`content/skills.md`): `| Skill | Depth | Weeks | Done looks like | Learn from | Status |`. **Weeks** lists the weeks that teach the skill (`W03`, `W01–W04, W25`, `W26 onward`); each listed week shows the skill in its **Skills** row, and the skills page links back to those weeks. Every week should map to at least one skill. **Status must stay the last column** (⬜ / 🟨 / ✅). It is set automatically by `scripts/sync_skills.py` (run by the quick-log workflow and on every deploy): ⬜ no task ticked in the skill's weeks, 🟨 some, ✅ all. Rows without a week number keep their manual status. The site shows the emoji as TODO / ACTIVE / DONE. Depth uses `<span class="badge deep|working|aware">`.
 
 **Resources** (`content/resources.md`): phase tables are `| | Resource | Type | Week |`. A number, range or list in **Week** (`3`, `14–16`, `8, 40`) automatically adds the row to those weeks' **Read** line.
 
-**Projects:** the first line after the title is `**Phase N · Weeks a–b** · Repo: … · Status: ⬜`.
+**Projects:** the first line after the title is `**Phase N · Weeks a–b** · Repo: …`. There is no Status line: a project is TODO until any task in its phase is ticked, ACTIVE while in progress, and DONE when every task in the phase is ticked (`getProjects` in `content.mjs`). Mini-project status comes from the week's `Mini-project shipped` task.
 
 **Automatic linking:** plain week references (`W08`, `W21–W23`) on content pages and the numbers in the resources **Week** column become links to those weeks (`linkWeeks` in `src/lib/content.mjs`). Each week's details show its mini-project, project, skills and reading automatically. When adding content, make sure every week keeps at least one skill and one resource.
 
@@ -93,7 +95,7 @@ scripts/append_log.py      quick-log issue → log entry + ticks tasks
 ## Logging flow
 
 1. **+ log progress** opens `/quick-update/`. The form shows the chosen week's tasks as checkboxes and builds a pre-filled GitHub issue (`[log] …`, template `quick-log.yml`).
-2. `quick-log.yml` runs only for issues opened by the repo owner. `append_log.py` adds the entry to `progress-log.md` and ticks the listed tasks. Then the README is refreshed, changes are committed, the issue is closed with a summary comment, and `deploy.yml` runs.
+2. `quick-log.yml` runs only for issues opened by the repo owner. `append_log.py` adds the entry to `progress-log.md` and ticks the listed tasks. If the optional **Mini-project repo** / **Project repo** fields are filled, it links the week's mini-project name and sets the project page's `Repo:` (using the Week field to find them). Then the README is refreshed, changes are committed, the issue is closed with a summary comment, and `deploy.yml` runs.
 3. Anyone else's `[log]` issue is closed and locked; nothing is written.
 
 ## Design

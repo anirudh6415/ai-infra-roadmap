@@ -21,9 +21,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from sync_skills import sync as sync_skills  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 LOG_FILE = ROOT / "content" / "progress-log.md"
 ROADMAP_DIR = ROOT / "content" / "roadmap"
+PROJECTS_DIR = ROOT / "content" / "projects"
 COMMENT_FILE = ROOT / ".quick-log-comment.md"  # read by the workflow, not committed
 START = "<!-- LOG:START -->"
 
@@ -35,6 +39,8 @@ LABELS = {
     "next": "next",
     "hours": "hours",
     "completed": "completed",
+    "mini-project repo": "repo",
+    "project repo": "project_repo",
     "links": "links",
 }
 EMPTY = {"", "_no response_", "none", "n/a"}
@@ -152,6 +158,50 @@ def tick_tasks(spec: str, prefer_week: int | None) -> tuple[list[dict], list[dic
     return ticked, already, missing
 
 
+# ----------------------------------------------------------------- repo links
+
+URL_RE = re.compile(r"^https?://\S+$")
+
+
+def set_mini_repo(week: int, link: str) -> str | None:
+    """Make the week's mini-project name a link to `link`. Returns the mini-project name."""
+    for path in sorted(ROADMAP_DIR.glob("phase-*.md")):
+        lines = path.read_text(encoding="utf-8").split("\n")
+        current = None
+        for i, line in enumerate(lines):
+            wm = WEEK_RE.match(line)
+            if wm:
+                current = int(wm.group(1))
+                continue
+            if current == week and line.startswith("- **Mini-project:**"):
+                m = re.match(r"^- \*\*Mini-project:\*\* (?:\[`([^`]+)`\]\([^)]*\)|`([^`]+)`)(.*)$", line)
+                if not m:
+                    return None
+                name = m.group(1) or m.group(2)
+                lines[i] = f"- **Mini-project:** [`{name}`]({link}){m.group(3)}"
+                path.write_text("\n".join(lines), encoding="utf-8")
+                return name
+    return None
+
+
+def set_project_repo(week: int, link: str) -> str | None:
+    """Set 'Repo:' on the project page of the phase that contains `week`. Returns the project file name."""
+    for path in sorted(PROJECTS_DIR.glob("p[0-9]-*.md")):
+        text = path.read_text(encoding="utf-8")
+        m = re.search(r"^\*\*Phase \d+ · Weeks (\d+)[–-](\d+)\*\*[^\n]*$", text, re.M)
+        if not m or not (int(m.group(1)) <= week <= int(m.group(2))):
+            continue
+        name = link.rstrip("/").split("/")[-1] or "repo"
+        line = m.group(0)
+        if "Repo:" in line:
+            new = re.sub(r"Repo:\s*(\[[^\]]*\]\([^)]*\)|`[^`]*`)(\s*_\(add link\)_)?", f"Repo: [{name}]({link})", line)
+        else:
+            new = line + f" · Repo: [{name}]({link})"
+        path.write_text(text.replace(line, new, 1), encoding="utf-8")
+        return path.name
+    return None
+
+
 def task_label(t: dict) -> str:
     return f"W{t['week']:02d}.{t['idx']} · {re.sub(r'[`*_]', '', t['text'])}"
 
@@ -205,6 +255,21 @@ def main() -> int:
     prefer = int(week_field) if week_field else None
     ticked, already, missing = tick_tasks(fields.get("completed", ""), prefer)
 
+    skills_changed = sync_skills()
+
+    repo_notes = []
+    for key, setter, label in (("repo", set_mini_repo, "Mini-project repo"), ("project_repo", set_project_repo, "Project repo")):
+        link = fields.get(key, "").strip()
+        if not link:
+            continue
+        if not URL_RE.match(link):
+            repo_notes.append(f"⚠️ {label} ignored: `{link}` is not a URL.")
+        elif prefer is None:
+            repo_notes.append(f"⚠️ {label} ignored: fill in the Week field so it knows which week/phase.")
+        else:
+            target = setter(prefer, link)
+            repo_notes.append(f"🔗 {label} set on {target}: {link}" if target else f"⚠️ {label}: couldn't find the place to put it for week {prefer}.")
+
     entry = build_entry(fields, entry_time(), ticked)
     text = LOG_FILE.read_text(encoding="utf-8")
     if START not in text:
@@ -222,6 +287,10 @@ def main() -> int:
         msg += ["", f"**Ticked on the roadmap ({len(ticked)}):**"] + [f"- [x] {task_label(t)}" for t in ticked]
     if already:
         msg += ["", "**Already done:**"] + [f"- {task_label(t)}" for t in already]
+    if skills_changed:
+        msg += ["", f"🧠 {skills_changed} skill status(es) updated from these ticks."]
+    if repo_notes:
+        msg += [""] + repo_notes
     if missing:
         msg += ["", "⚠️ **Couldn't match these to a task** (use an ID like `W01.2` or copy the task text):"] + [f"- {m}" for m in missing]
     COMMENT_FILE.write_text("\n".join(msg) + "\n", encoding="utf-8")

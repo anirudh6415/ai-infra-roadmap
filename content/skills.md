@@ -4,7 +4,7 @@ title: Master skill list
 
 # Master skill list
 
-Every skill on the roadmap, how deep it needs to go, which weeks teach it, what "done" means and where to learn it. All **Learn from** links are also on the [Resources](resources.md) page. Update the **Status** column as you go: ⬜ not started → 🟨 in progress → ✅ done. The README progress block counts these automatically.
+Every skill on the roadmap, how deep it needs to go, which weeks teach it, what "done" means and where to learn it. All **Learn from** links are also on the [Resources](resources.md) page. **Status updates itself** from the tasks you tick in the weeks listed under **Weeks**: **TODO** until a task is ticked, **ACTIVE** once some are, **DONE** when every task in those weeks is ticked. The one skill with no week (*Ongoing*) is set by hand: in the file, ⬜ = TODO, 🟨 = ACTIVE, ✅ = DONE.
 
 **Depth levels**
 
@@ -13,7 +13,7 @@ Every skill on the roadmap, how deep it needs to go, which weeks teach it, what 
 - <span class="badge aware">Awareness</span> **Just enough.** Learn it when a project or work task needs it; a weekend each.
 
 !!! warning "Keep the status column last"
-    `scripts/update_readme.py` reads the status emoji from the **last column** of each table row. Add columns before it, not after.
+    `scripts/sync_skills.py` writes and `scripts/update_readme.py` reads the status emoji in the **last column** of each table row. Add columns before it, not after.
 
 ## Foundations: containers, Kubernetes & delivery
 

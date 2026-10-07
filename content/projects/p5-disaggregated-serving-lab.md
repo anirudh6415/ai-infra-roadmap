@@ -4,7 +4,7 @@ title: "P5 · Disaggregated serving lab"
 
 # P5 · Disaggregated serving lab
 
-**Phase 5 · Weeks 53–65** · Repo: `disaggregated-serving-lab` _(add link)_ · Status: ⬜
+**Phase 5 · Weeks 53–65** · Repo: `disaggregated-serving-lab` _(add link)_
 
 ## Goal
 

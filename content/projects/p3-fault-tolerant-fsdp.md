@@ -4,7 +4,7 @@ title: "P3 · Fault-tolerant FSDP"
 
 # P3 · Fault-tolerant FSDP
 
-**Phase 3 · Weeks 27–39** · Repo: `fault-tolerant-fsdp` _(add link)_ · Status: ⬜
+**Phase 3 · Weeks 27–39** · Repo: `fault-tolerant-fsdp` _(add link)_
 
 ## Goal
 

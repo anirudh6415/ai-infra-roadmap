@@ -50,10 +50,10 @@ Only issues **you** (the repo owner) open with a title starting `[log]` are logg
 ```text
 content/                 ← everything you write (plain Markdown)
   home.md                  "About this roadmap" section on the homepage
-  skills.md                skill tables (status = last column)
+  skills.md                skill tables (status = last column, set from ticks)
   roadmap/phase-1..4.md    weeks + checkboxes  → drive all progress bars
   roadmap/index.md         calendar, topic map, compute, parking lot
-  projects/*.md            project specs (Status: line at the top)
+  projects/*.md            project specs (status is computed from ticks)
   resources.md, people.md, progress-log.md, notes/*, archive/*
 src/config.mjs           ← site name, repo, start date, phase & project metadata
 src/styles/global.css    ← the design (colour tokens at the top)
@@ -68,8 +68,10 @@ scripts/                 ← README updater + quick-log appender (Python)
 |---|---|
 | Log progress and tick tasks | **+ log progress** on the site, or a **Quick log** issue in the GitHub app (Completed: `W01.2` or the task text, one per line) |
 | Tick a task without logging | Open a phase page → *edit this phase on GitHub* → change `- [ ]` to `- [x]` |
-| Update a skill | Last column of `content/skills.md`: ⬜ → 🟨 → ✅ |
-| Update a project | `Status:` line at the top of `content/projects/<project>.md` |
+| Mark a mini-project shipped | Tick *Mini-project shipped* for that week in the log form |
+| Update a project's status | Nothing to do: it follows the ticks in its phase |
+| Update a skill's status | Nothing to do: it follows the ticks in the weeks listed under **Weeks** |
+| Link a mini-project or project repo | Paste the URL in the log form's *mini-project repo* / *project repo* field |
 | Add a resource | Add a row in `content/resources.md` |
 | Add a note | Copy `content/notes/template.md` to a new file. It appears in the sidebar automatically |
 | Add any page | Drop a `.md` file anywhere in `content/`; it's published at the matching URL |

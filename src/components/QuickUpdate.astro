@@ -13,7 +13,7 @@ const taskData = Object.fromEntries(
   <div class="row2">
     <div>
       <label for="qu-week">week</label>
-      <input id="qu-week" name="week" type="number" min="1" max="60" value={week ?? ''} placeholder="1" />
+      <input id="qu-week" name="week" type="number" min="1" max={SITE.totalWeeks} value={week ?? ''} placeholder="1" />
     </div>
     <div>
       <label for="qu-hours">hours</label>
@@ -32,6 +32,16 @@ const taskData = Object.fromEntries(
   <textarea id="qu-learned" name="learned" rows="2" placeholder="The one thing you'd explain to someone else"></textarea>
   <label for="qu-next">next</label>
   <input id="qu-next" name="next" type="text" placeholder="The very next step" />
+  <div class="row2">
+    <div>
+      <label for="qu-repo">mini-project repo</label>
+      <input id="qu-repo" name="repo" type="url" placeholder="https://github.com/… (optional)" />
+    </div>
+    <div>
+      <label for="qu-project-repo">project repo</label>
+      <input id="qu-project-repo" name="project_repo" type="url" placeholder="set once per phase (optional)" />
+    </div>
+  </div>
   <label for="qu-links">links</label>
   <input id="qu-links" name="links" type="text" placeholder="Commit, notebook or post URLs (optional)" />
   <div class="actions">
@@ -46,7 +56,7 @@ const taskData = Object.fromEntries(
 <script>
   // Builds a pre-filled GitHub issue (template quick-log.yml). The quick-log
   // workflow turns it into a progress-log entry and ticks the chosen tasks.
-  const FIELDS = ['week', 'hours', 'did', 'learned', 'next', 'links'];
+  const FIELDS = ['week', 'hours', 'did', 'learned', 'next', 'links', 'repo', 'project_repo'];
   const KEY = 'air-quick-update-draft';
   const form = document.getElementById('qu-form') as HTMLFormElement | null;
 

@@ -49,7 +49,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/progress-log.md content/roadmap README.md
+          git add content/progress-log.md content/roadmap content/projects content/skills.md README.md
           git commit -m "log: progress entry from #${ISSUE_NUMBER}"
           git push
 
