@@ -61,6 +61,23 @@ jobs:
           gh issue close "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" \
             --comment "✅ Added to the progress log. The site will refresh in about a minute."
 
+  # Anyone can open an issue on a public repo. "[log]" issues from anyone but
+  # the owner are never written to the log; this closes and locks them.
+  reject-others:
+    if: >-
+      startsWith(github.event.issue.title, '[log]') &&
+      github.event.issue.user.login != github.repository_owner
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close and lock
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue close "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --reason "not planned" \
+            --comment "Only the repository owner can add progress-log entries. This issue was closed automatically and nothing was logged."
+          gh issue lock "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --reason spam || true
+
   # Commits pushed with the built-in token don't trigger other workflows,
   # so the deploy workflow is called directly here.
   deploy:
