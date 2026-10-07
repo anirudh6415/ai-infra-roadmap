@@ -42,7 +42,7 @@ const built = new Date().toISOString().slice(0, 10);
     <div class="bar">
       <a class="brand" href={url('/')}>
         <span class="pn">{SITE.partNumber}</span>
-        <span class="rev">AI INFRA ROADMAP · {SITE.rev} · {SITE.authorShort}</span>
+        <span class="rev">AI INFRA ROADMAP · {SITE.rev}</span>
       </a>
       <nav class="nav" aria-label="Main">
         {NAV.map((n) => (
@@ -71,7 +71,7 @@ const built = new Date().toISOString().slice(0, 10);
   </div>
 
   <footer class="site-footer">
-    <span>Built in public by {SITE.author} · rebuilt {built}</span>
+    <span>Built in public · rebuilt {built}</span>
     <nav aria-label="Elsewhere">
       <a href={SITE.links.profile}>profile</a>
       <a href={SITE.links.github}>github</a>
@@ -104,6 +104,18 @@ const built = new Date().toISOString().slice(0, 10);
         var el = document.getElementById(id);
         if (el && el.tagName === 'DETAILS') { el.open = true; el.scrollIntoView({ block: 'start' }); }
       }
+      // Copy buttons on code and prompt blocks
+      document.querySelectorAll('.prose pre').forEach(function (pre) {
+        var btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'copy-btn'; btn.textContent = 'copy';
+        btn.addEventListener('click', function () {
+          var text = (pre.querySelector('code') || pre).innerText;
+          navigator.clipboard.writeText(text).then(function () {
+            btn.textContent = 'copied ✓'; setTimeout(function () { btn.textContent = 'copy'; }, 1500);
+          }, function () { btn.textContent = 'select & copy'; });
+        });
+        pre.appendChild(btn);
+      });
       window.addEventListener('hashchange', openHash);
       openHash();
     })();

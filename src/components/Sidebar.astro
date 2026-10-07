@@ -10,6 +10,7 @@ const cur = (href: string) => (here === href ? 'page' : undefined);
 const pages = [
   { label: 'skills', href: url('/skills/') },
   { label: 'resources', href: url('/resources/') },
+  { label: 'tool radar', href: url('/radar/') },
   { label: 'people', href: url('/people/') },
   { label: 'progress log', href: url('/progress-log/') },
   { label: 'quick update', href: url('/quick-update/') },
@@ -20,6 +21,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 <aside class="sidebar" id="sidebar" aria-label="Site tree">
   <div class="tree-root">~/roadmap</div>
   <a href={url('/roadmap/')} aria-current={cur(url('/roadmap/'))}>· overview &amp; calendar</a>
+  <a href={url('/playbook/')} aria-current={cur(url('/playbook/'))}>· optimization playbook</a>
   {phases.map((p) => (
     <details open={p.active || here === p.href}>
       <summary>{pad(p.n)} {p.short}</summary>
@@ -41,7 +43,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
   {projects.map((p) => (
     <a href={p.href} aria-current={cur(p.href)}>· {p.code.toLowerCase()} {p.slug.replace(/^p\d-/, '')} {p.status.glyph}</a>
   ))}
-  <a href={url('/projects/mini-projects/')} aria-current={cur(url('/projects/mini-projects/'))}>· mini-projects</a>
+  <a href={url('/projects/weekly/')} aria-current={cur(url('/projects/weekly/'))}>· weekly mini-projects ({phases.reduce((a, p) => a + p.weeks.length, 0)})</a>
+  <a href={url('/projects/mini-projects/')} aria-current={cur(url('/projects/mini-projects/'))}>· extra mini-projects</a>
 
   <div class="tree-root">~/notes</div>
   <a href={url('/notes/')} aria-current={cur(url('/notes/'))}>· index</a>

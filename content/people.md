@@ -4,63 +4,64 @@ title: People to follow
 
 # People to follow
 
-Engineers, researchers and communities whose work maps onto this roadmap. Follow them on whichever platform they're active (X, LinkedIn, GitHub, blogs). Read their papers and posts; you don't need to follow everyone.
+Engineers, researchers and communities whose work maps onto this roadmap. Every link below was checked and goes to the person's own homepage or GitHub profile, or to the community's official page.
 
 !!! tip "How to use this list"
     Pick **5** to follow closely this phase. Read one thing from one of them each week. When someone's work helps you, say so publicly; that's how connections start.
 
 ## Inference & serving
 
-| Person | Known for | Why follow |
+| Person | Known for | Link |
 |---|---|---|
-| Woosuk Kwon, Zhuohan Li | vLLM, PagedAttention | The origin of modern LLM serving |
-| Lianmin Zheng, Ying Sheng | SGLang, RadixAttention, LMSYS | Serving systems and prefix caching |
-| Ion Stoica | Ray, vLLM (UC Berkeley Sky Computing Lab) | Systems research behind much of AI infra |
-| Tri Dao | FlashAttention | Attention kernels and hardware-aware algorithms |
-| Tim Dettmers | Quantization, bitsandbytes, QLoRA | Low-precision inference and its trade-offs |
+| Woosuk Kwon | vLLM | [GitHub](https://github.com/WoosukKwon) |
+| Zhuohan Li | vLLM | [GitHub](https://github.com/zhuohan123) |
+| Lianmin Zheng | SGLang | [GitHub](https://github.com/merrymercy) |
+| Ying Sheng | SGLang | [GitHub](https://github.com/Ying1123) |
+| Ion Stoica | UC Berkeley Sky Computing Lab; co-founder of Anyscale (Ray) and Databricks | [Homepage](https://people.eecs.berkeley.edu/~istoica/) |
+| Tri Dao | FlashAttention; Princeton | [Homepage](https://tridao.me/) |
+| Tim Dettmers | Quantization, GPU hardware for deep learning | [Blog](https://timdettmers.com/) |
 
 ## GPU performance & kernels
 
-| Person | Known for | Why follow |
+| Person | Known for | Link |
 |---|---|---|
-| Horace He | "Go Brrrr" post, torch.compile | Clear first-principles performance thinking |
-| Mark Saroufim | GPU MODE co-founder, PyTorch | Kernel community and competitions |
-| Sasha Rush | GPU Puzzles, Triton Puzzles | Hands-on teaching material |
-| Simon Boehm | CUDA matmul optimization post | Step-by-step kernel optimization |
-| Song Han | MIT efficient ML (quantization, pruning) | Efficiency research and a free course |
+| Horace He | "Making Deep Learning Go Brrrr"; PyTorch compilers | [Homepage](https://horace.io/) |
+| Mark Saroufim | Co-creator of GPU MODE; PyTorch | [GitHub](https://github.com/msaroufim) |
+| Sasha Rush | GPU Puzzles, Triton Puzzles | [GitHub](https://github.com/srush) |
+| Simon Boehm | CUDA matmul optimization worklog | [Homepage](https://siboehm.com/) |
+| Song Han | Efficient AI computing (quantization, efficient models); MIT | [Homepage](https://hanlab.mit.edu/songhan) |
 
-## Distributed training & ML engineering
+## Distributed training & ML systems
 
-| Person | Known for | Why follow |
+| Person | Known for | Link |
 |---|---|---|
-| Stas Bekman | *Machine Learning Engineering Open Book* | Real-world large-scale training lessons |
-| Andrej Karpathy | nanoGPT, llm.c, teaching | Building things from scratch to understand them |
-| Tianqi Chen | TVM, XGBoost, MLC-LLM, CMU DL Systems course | ML compilers and systems |
-| Chip Huyen | *Designing ML Systems*, *AI Engineering* | ML systems and AI engineering in production |
-| Vijay Janapa Reddi | *Machine Learning Systems* (mlsysbook) | ML systems education |
+| Stas Bekman | *Machine Learning Engineering Open Book* | [GitHub](https://github.com/stas00) |
+| Andrej Karpathy | nanoGPT, teaching from scratch | [Homepage](https://karpathy.ai/) |
+| Tianqi Chen | ML systems and compilers; CMU | [Homepage](https://tqchen.com/) |
+| Chip Huyen | ML systems in production, AI engineering | [Homepage](https://huyenchip.com/) |
+| Vijay Janapa Reddi | *Machine Learning Systems* textbook | [GitHub](https://github.com/profvjreddi) · [Book](https://mlsysbook.ai/) |
 
-## Hardware, systems & capacity
+## Hardware, performance & capacity
 
-| Person | Known for | Why follow |
+| Person / org | Known for | Link |
 |---|---|---|
-| Dylan Patel | SemiAnalysis | GPU supply, data centers, hardware economics |
-| Brendan Gregg | *Systems Performance*, USE method, flame graphs | Performance methodology |
-| Mor Harchol-Balter | Queueing theory (CMU) | The math of capacity and latency |
+| Brendan Gregg | Systems performance methodology, USE method | [Homepage](https://www.brendangregg.com/) |
+| Mor Harchol-Balter | Queueing theory for computer systems; CMU | [Homepage](https://www.cs.cmu.edu/~harchol/) |
+| SemiAnalysis | Research on semiconductors, GPUs and AI infrastructure | [Site](https://semianalysis.com/) |
 
-## Communities
+## Communities & venues
 
-| Community | Why join |
-|---|---|
-| **GPU MODE** (Discord + YouTube lectures) | The most active community for CUDA, Triton and kernels |
-| **vLLM** community (Slack, GitHub discussions) | Serving questions, release notes, roadmap |
-| **Kubernetes WG Serving / Device Management**, CNCF | Where K8s GPU scheduling and inference standards are shaped |
-| **MLSys, OSDI, SOSP** conferences | Where serving and training systems papers appear |
-| **Hot Chips** | Hardware architecture talks |
-| **r/LocalLLaMA** | Practical inference and quantization experiments |
+| Community | Why | Link |
+|---|---|---|
+| GPU MODE | GPU reading group and community: CUDA, Triton, kernels | [YouTube](https://www.youtube.com/@GPUMODE) · [Lecture materials](https://github.com/gpu-mode/lectures) |
+| vLLM | Users forum and contributor Slack (links from the vLLM README) | [Forum](https://discuss.vllm.ai) · [Slack](https://slack.vllm.ai) |
+| MLSys | Conference on machine learning and systems | [mlsys.org](https://mlsys.org/) |
+| OSDI | Where many serving and training systems papers appear | [USENIX OSDI](https://www.usenix.org/conferences/byname/179) |
+| Hot Chips | Symposium on high-performance chips | [hotchips.org](https://hotchips.org/) |
 
-## My own network
+## Your network
 
-People I already know who work in this space (co-authors, colleagues, mentors). Keep this list here or in a private doc.
+People you already know in this space: past collaborators, colleagues, mentors. Keep this table here or in a private doc.
 
 | Name | Where | Last contacted | Notes |
 |---|---|---|---|

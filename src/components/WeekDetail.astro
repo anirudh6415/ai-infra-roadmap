@@ -1,16 +1,24 @@
 ---
-interface Props { week: any; source?: string }
+interface Props { week: any }
 const { week } = Astro.props;
-const labels: Record<string, string> = { Learn: 'Learn · 30 min', Build: 'Build · Sat', Ship: 'Ship · Sun', Plan: 'Plan' };
+const labels: Record<string, string> = { Learn: 'Learn · 30 min', Build: 'Build · Sat', Ship: 'Ship · Sun', Plan: 'Plan', 'Mini-project': 'Mini-project' };
 ---
 {week.fields.length > 0 && (
   <div class="fields">
     {week.fields.map((f: any) => (
       <>
-        <span class="f-label">{labels[f.label] || f.label}</span>
-        <span set:html={f.html} />
+        <span class={`f-label${f.label === 'Mini-project' ? ' f-mini' : ''}`}>{labels[f.label] || f.label}</span>
+        <span class={f.label === 'Mini-project' ? 'f-mini-val' : undefined} set:html={f.html} />
       </>
     ))}
+    {week.reading.length > 0 && (
+      <>
+        <span class="f-label">Read</span>
+        <span class="f-read">{week.reading.map((r: string, i: number) => (
+          <><span set:html={r} />{i < week.reading.length - 1 && <span class="sep"> · </span>}</>
+        ))}</span>
+      </>
+    )}
   </div>
 )}
 {week.tasks.length > 0 && (

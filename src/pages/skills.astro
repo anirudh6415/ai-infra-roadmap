@@ -40,7 +40,7 @@ const depthClass = (d: string) => (/deep/i.test(d) ? 'deep' : /working/i.test(d)
       </div>
       <div class="table-wrap" style="border-top:0">
         <table class="skill-table">
-          <thead><tr><th>Skill</th><th>Depth</th><th>Phase</th><th class="dl">Done looks like</th><th style="text-align:right">Status</th></tr></thead>
+          <thead><tr><th>Skill</th><th>Depth</th><th>Phase</th><th class="dl">Done looks like</th><th>Learn from</th><th style="text-align:right">Status</th></tr></thead>
           <tbody>
             {g.skills.map((k) => (
               <tr>
@@ -48,6 +48,7 @@ const depthClass = (d: string) => (/deep/i.test(d) ? 'deep' : /working/i.test(d)
                 <td><span class={`depth ${depthClass(k.depth)}`}>{k.depth}</span></td>
                 <td class="mono" style="font-size:12.5px">{k.phase}</td>
                 <td class="done-text" set:html={k.done} />
+                <td class="res" set:html={k.resources} />
                 <td class="st"><span class={`chip ${k.status.key === 'done' ? 'done' : k.status.key === 'doing' ? 'active' : ''}`}>{k.status.glyph} {k.status.label}</span></td>
               </tr>
             ))}

@@ -1,12 +1,14 @@
 ---
-title: "Month 12+ · Interview prep"
+title: "Interview prep (from Month 12)"
 ---
 
-# Month 12+ · Interview prep
+# Interview prep (from Month 12)
 
 **Target roles:** LLM inference engineer, AI infrastructure / performance engineer, GPU capacity & efficiency engineer, ML platform engineer, at AI labs, GPU makers and GPU clouds.
 
-**Plan:** 8–12 weeks, same time budget as the roadmap.
+**When:** start at Week 53 at a light pace (the two weekday coding slots plus one mock a fortnight) while Phases 5–6 continue. Switch to full focus for 8–12 weeks whenever you start applying, which can be any time after Week 52.
+
+**Why not wait until Week 78:** Phases 5–6 make the profile stronger, but the first four projects are already enough for most inference and AI infrastructure interviews.
 
 ## What these interviews usually cover
 
@@ -16,8 +18,8 @@ title: "Month 12+ · Interview prep"
 | Inference / ML system design | "Serve model X at N RPS under latency SLO Y," "Design a GPU scheduler" | P1 + P4: you've measured and planned this |
 | Performance deep dive | Roofline, memory bandwidth, KV cache, batching, profiling | Phases 1–2 |
 | Distributed systems | Parallelism, collectives, failures, checkpointing | Phase 3 |
-| Project deep dive | Walk through one project, trade-offs and numbers | Your four projects |
-| Behavioral | Influence without authority, negotiation, ambiguity | Your capacity negotiations with developers |
+| Project deep dive | Walk through one project, trade-offs and numbers | Your phase projects (P1–P6) |
+| Behavioral | Influence without authority, negotiation, ambiguity | Trade-off negotiations with the teams you support |
 
 ## Weekly shape
 
@@ -38,14 +40,14 @@ title: "Month 12+ · Interview prep"
 ## Stories to prepare (STAR format)
 
 - [ ] A capacity negotiation where you got a team to accept a different latency/cost trade-off
-- [ ] Building the reclamation tool: problem, approach, impact (with numbers from your private impact log)
-- [ ] Starting capacity office hours: influence without authority
+- [ ] A tool you built: problem, approach, impact (with numbers from your private impact log)
+- [ ] A process you started that other teams adopted: influence without authority
 - [ ] A research result you're proud of, and what you'd do differently
 - [ ] A time you were wrong and changed your mind based on data
 
 ## Before applying
 
-- [ ] Resume rewritten around measurable impact and the four projects
+- [ ] Resume rewritten around measurable impact and the phase projects
 - [ ] Profile site updated with projects and posts
-- [ ] Referrals asked for from co-authors and community contacts
+- [ ] Referrals asked for from past collaborators and community contacts
 - [ ] Three mock interviews done with someone else

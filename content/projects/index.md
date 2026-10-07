@@ -4,7 +4,7 @@ title: Projects
 
 # Projects
 
-Four portfolio projects, one per phase, each building on the last. Together they tell one story: **measure → understand → scale → plan.**
+Six portfolio projects, one per phase, each building on the last. The first four tell one story, **measure → understand → scale → plan**; Phases 5 and 6 take it to fleet scale: **serve at scale → train and operate**.
 
 The project cards above are generated from each project page. Change a project's status in the `Status:` line at the top of its page (⬜ → 🟨 → ✅).
 

@@ -47,7 +47,7 @@ const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', pa
           <span class="wr-code">{w.code}</span>
           <span style="min-width:0">
             <span class="wr-title">{w.title}{w.tag && <span class="chip tag" style="margin-left:8px;vertical-align:2px">{w.tag.toUpperCase()}</span>}</span>
-            <span class="wr-sub">{w.summary}</span>
+            <span class="wr-sub">{w.mini ? <><span class="mini-name">{w.mini.name}</span> · {w.mini.desc}</> : w.summary}</span>
           </span>
           <span class="wr-prog"><span class="bar-track"><span class="bar-fill" style={`display:block;width:${w.pct}%`}></span></span><span class="num">{w.done}/{w.total}</span></span>
           <span class={`chip ${w.status}`}>{statusLabel[w.status]}</span>

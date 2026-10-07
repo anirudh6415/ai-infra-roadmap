@@ -1,9 +1,7 @@
 // Everything site-specific lives here. Rename the repo or user? Change it once here.
 export const SITE = {
   title: 'AI Infra Roadmap',
-  partNumber: 'AIR-52',
-  author: 'Anirudh Iyengar K N',
-  authorShort: 'A. IYENGAR',
+  partNumber: 'AIR-78',
   rev: 'REV 2026.10',
   origin: 'https://anirudh6415.github.io',
   base: '/ai-infra-roadmap',
@@ -11,10 +9,11 @@ export const SITE = {
   repo: 'ai-infra-roadmap',
   branch: 'main',
   start: '2026-10-12', // Monday of Week 1
-  totalWeeks: 52,
-  headline: 'Capacity engineer to inference performance engineer in 52 weeks.',
+  totalWeeks: 78,
+  headline: 'AI Infra Roadmap',
+  subtitle: 'Optimizing AI workloads, from GPU kernels to fleet capacity.',
   description:
-    'Four phases, four measured projects. One concept, one experiment and one shipped artifact every week, on 30 minutes a weekday and four hours at the weekend.',
+    'Six phases, six portfolio projects and a mini-project every week. One concept, one experiment and one shipped artifact each week, on 30 minutes a weekday and four hours at the weekend.',
   links: {
     profile: 'https://anirudh6415.github.io/',
     github: 'https://github.com/anirudh6415',
@@ -44,6 +43,16 @@ export const PHASES = [
     weeks: '40–52', dates: '12 Jul – 10 Oct 2027', month: 'JUL', hardware: 'Laptop (kind) + optional GPU VM',
     project: 'p4-capacity-planner', projectShort: 'P4 planner',
   },
+  {
+    n: 5, slug: 'phase-5', title: 'Serving at scale', short: 'serving at scale',
+    weeks: '53–65', dates: '11 Oct 2027 – 9 Jan 2028', month: 'OCT', hardware: '2–4 GPUs (W53–56), then 1 GPU',
+    project: 'p5-disaggregated-serving-lab', projectShort: 'P5 serving lab',
+  },
+  {
+    n: 6, slug: 'phase-6', title: 'Training & fleet operations', short: 'training & fleet ops',
+    weeks: '66–78', dates: '10 Jan – 9 Apr 2028', month: 'JAN', hardware: '1–2 GPUs + laptop',
+    project: 'p6-post-training-fleet-lab', projectShort: 'P6 fleet lab',
+  },
 ];
 
 export const PROJECTS = [
@@ -55,6 +64,10 @@ export const PROJECTS = [
     pitch: 'What a GPU failure really costs, and how checkpointing buys it back.' },
   { slug: 'p4-capacity-planner', code: 'P4', name: 'GPU capacity planner', phase: 4, weeks: '40–52',
     pitch: 'An optimization model that plans GPUs for LLM and agent workloads.' },
+  { slug: 'p5-disaggregated-serving-lab', code: 'P5', name: 'Disaggregated serving lab', phase: 5, weeks: '53–65',
+    pitch: 'When prefill/decode disaggregation, cache-aware routing and KV offloading actually pay off.' },
+  { slug: 'p6-post-training-fleet-lab', code: 'P6', name: 'Post-training & fleet health lab', phase: 6, weeks: '66–78',
+    pitch: 'What RL post-training needs from a GPU fleet, and how to keep that fleet healthy.' },
 ];
 
 export const NAV = [

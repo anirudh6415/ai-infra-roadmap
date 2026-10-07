@@ -17,3 +17,6 @@ private/
 .DS_Store
 .vscode/
 .idea/
+
+# Temporary file written by the quick-log workflow
+.quick-log-comment.md

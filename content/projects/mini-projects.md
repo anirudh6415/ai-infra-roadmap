@@ -1,10 +1,10 @@
 ---
-title: Mini-projects
+title: Extra mini-projects
 ---
 
-# Mini-projects
+# Extra mini-projects
 
-Small, optional builds for a spare weekend or a buffer week. Each should take one or two sessions and end with a short note or post.
+Every roadmap week already has its own [weekly mini-project](../weekly/). These are small, optional builds for a spare weekend or a buffer week. Each should take one or two sessions and end with a short note or post.
 
 | Mini-project | Skills | Hardware | Status |
 |---|---|---|---|

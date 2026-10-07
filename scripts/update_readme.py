@@ -28,6 +28,8 @@ PHASES = [
     ("Phase 2 · Down to the GPU", "roadmap/phase-2.md"),
     ("Phase 3 · Scale out", "roadmap/phase-3.md"),
     ("Phase 4 · Platform & economics", "roadmap/phase-4.md"),
+    ("Phase 5 · Serving at scale", "roadmap/phase-5.md"),
+    ("Phase 6 · Training & fleet operations", "roadmap/phase-6.md"),
 ]
 START, END = "<!-- AUTO:START -->", "<!-- AUTO:END -->"
 BOX = re.compile(r"^\s*[-*]\s+\[( |x|X)\]\s", re.MULTILINE)

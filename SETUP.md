@@ -36,12 +36,12 @@ Repo → **Settings → Actions → General → Workflow permissions** → **Rea
 ## 4. Test the Quick update flow
 
 1. Open the site → **+ log progress**.
-2. Type something in **did**, press **submit via github**.
+2. Tick a task you finished (e.g. *W01.1 Roadmap site is live*), type something in **did**, press **submit via github**.
 3. GitHub opens a pre-filled issue. Press **Submit new issue**.
 4. Watch the **Actions** tab: *Quick log → progress log* runs, commits, redeploys and closes the issue.
-5. After about a minute the entry appears on the homepage, the log page and the README.
+5. After about a minute the entry appears on the homepage, the log page and the README, and the task is ticked everywhere.
 
-Only issues **you** open with a title starting `[log]` are processed.
+Only issues **you** (the repo owner) open with a title starting `[log]` are logged. Anyone else's `[log]` issue is closed and locked automatically, and nothing is written.
 
 ---
 
@@ -66,8 +66,8 @@ scripts/                 ← README updater + quick-log appender (Python)
 
 | I want to… | Do this |
 |---|---|
-| Log progress | **+ log progress** on the site, or a **Quick log** issue in the GitHub app |
-| Tick off a task | Open a phase page → *edit this phase on GitHub* → change `- [ ]` to `- [x]` |
+| Log progress and tick tasks | **+ log progress** on the site, or a **Quick log** issue in the GitHub app (Completed: `W01.2` or the task text, one per line) |
+| Tick a task without logging | Open a phase page → *edit this phase on GitHub* → change `- [ ]` to `- [x]` |
 | Update a skill | Last column of `content/skills.md`: ⬜ → 🟨 → ✅ |
 | Update a project | `Status:` line at the top of `content/projects/<project>.md` |
 | Add a resource | Add a row in `content/resources.md` |
@@ -84,6 +84,8 @@ Every push to `main` rebuilds the site and refreshes the README progress block.
 | `### Week 7 · Title` in a phase file | A week row (keep this exact pattern) |
 | `### Week 5 · Title (light week)` | Hatched square on the timeline + "LIGHT WEEK" tag |
 | `- **Learn:** …`, `- **Build:** …`, `- **Ship:** …` | The learn / build / ship table |
+| `- **Mini-project:** \`name\`: what you ship.` | The week's mini-project (also listed on Projects → weekly) |
+| A number or range in the **Week** column of `content/resources.md` | That resource appears in the week's **Read** row |
 | `- [ ]` / `- [x]` | Tasks; counted for every progress bar |
 | `!!! tip "Title"` + indented lines | A callout box (`tip`, `warning`, `danger`, `abstract`…) |
 | `??? example "Title"` + indented lines | A collapsible callout |
@@ -98,8 +100,8 @@ content/*.md ──push──▶ deploy.yml ──▶ update_readme.py ──▶
                                   └─▶ npm run build (Astro) ──▶ GitHub Pages
 
 "+ log progress" ──▶ pre-filled "[log]" issue ──▶ quick-log.yml
-    └─▶ append_log.py (content/progress-log.md) ──▶ update_readme.py
-    └─▶ commit ──▶ close issue ──▶ deploy.yml
+    ├─ owner's issue  ──▶ append_log.py (log entry + tick tasks) ──▶ update_readme.py ──▶ commit ──▶ close ──▶ deploy.yml
+    └─ anyone else's  ──▶ close + lock, nothing logged
 ```
 
 ## Design
@@ -115,7 +117,7 @@ content/*.md ──push──▶ deploy.yml ──▶ update_readme.py ──▶
 |---|---|
 | Deploy fails with "Pages not enabled" | Step 2: set Pages source to **GitHub Actions** |
 | README commit fails with 403 | Step 3: enable read and write workflow permissions |
-| Quick log issue isn't processed | Title must start with `[log]` and be opened by the repo owner |
+| Quick log issue isn't processed | Title must start with `[log]` and the issue must be opened by the repo owner |
 | Deployment blocked by environment rules | Settings → Environments → `github-pages` → allow the `main` branch |
 | A week is missing from the phase page | Its heading must be `### Week N · Title` |
 | Build fails after editing | Check the Actions log; the error names the file. Usually an unclosed table row or heading pattern |

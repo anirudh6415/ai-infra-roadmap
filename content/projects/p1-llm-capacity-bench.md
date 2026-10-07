@@ -12,7 +12,7 @@ Answer, with measured numbers: **"For this model and this workload, how many GPU
 
 ## Why it matters
 
-- It's the exact question capacity engineers answer every week, usually from vendor numbers or guesswork.
+- It's the question every GPU capacity plan has to answer, and it's usually answered from vendor numbers or guesswork.
 - It shows you understand *why* the number is what it is (prefill vs decode, KV cache, batching), not just what the dashboard says.
 - Adding a quality check for quantization uses your benchmark-research background, which most infra engineers don't have.
 
@@ -67,7 +67,7 @@ Answer, with measured numbers: **"For this model and this workload, how many GPU
 
 - [ ] Repo with reproducible scripts, raw CSVs and charts
 - [ ] `kv_calc.py`, `cost.py`, `gpus_needed()`
-- [ ] Post: *"How many GPUs does this LLM actually need? A capacity engineer's benchmark."*
+- [ ] Post: *"How many GPUs does this LLM actually need? A first-principles benchmark."*
 - [ ] One summary chart that fits in a LinkedIn post
 
 ## Stretch goals

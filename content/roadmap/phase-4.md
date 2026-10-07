@@ -20,6 +20,7 @@ title: "Phase 4 · Platform & economics"
 - **Learn:** the path from pod spec to GPU: device plugin, NVIDIA GPU Operator, GPU Feature Discovery labels, taints and tolerations, node selectors.
 - **Build:** a `kind` cluster with Run:ai's fake GPU operator, so you can schedule "GPU" pods without real GPUs. (Optional: k3s + GPU Operator on a rented GPU VM.)
 - **Ship:** diagram of the scheduling path with the YAML that drives each step.
+- **Mini-project:** `kind-gpu-lab`: a kind cluster with fake GPUs and label-based scheduling.
 
 **Done when**
 
@@ -32,6 +33,7 @@ title: "Phase 4 · Platform & economics"
 - **Learn:** what each one isolates (memory, compute, faults) and what it doesn't. GPU Operator docs on MIG and time-slicing.
 - **Build:** configure time-slicing (and MIG if on a supporting GPU); run two workloads on one GPU.
 - **Ship:** a decision matrix: workload type → sharing method.
+- **Mini-project:** `gpu-sharing-matrix`: a time-slicing/MIG demo and a decision matrix.
 
 **Done when**
 
@@ -41,32 +43,38 @@ title: "Phase 4 · Platform & economics"
 ### Week 42 · Batch scheduling and multi-tenancy
 
 - **Learn:** Kueue (ClusterQueues, LocalQueues, cohorts, borrowing), quotas, priority and preemption, gang scheduling (Volcano, NVIDIA KAI Scheduler), Dynamic Resource Allocation (DRA), noisy neighbors.
-- **Build:** set up Kueue on `kind` with two teams, quotas and borrowing; demonstrate preemption.
-- **Ship:** write-up mapping this to how you manage quotas at work (generic, no internal details).
+- **Build:** set up Kueue on `kind` with two teams, quotas and borrowing; demonstrate preemption. Then read the Kubernetes multi-tenancy guide: what MIG vs time-slicing actually isolate, namespaces, RBAC, network policies, and keeping model weights private.
+- **Ship:** write-up on how quotas, borrowing and preemption map to real multi-team GPU clusters.
+- **Mini-project:** `kueue-tenants`: a two-team Kueue setup with quotas and preemption.
 
 **Done when**
 
 - [ ] Kueue with 2 tenants and quotas working
 - [ ] Preemption demonstrated
 - [ ] DRA explained in a note
+- [ ] Isolation note: what each sharing method protects against
 
 ### Week 43 · Inference on Kubernetes and distributed tracing
 
-- **Learn:** KServe, llm-d, Gateway API Inference Extension (model-aware routing), KEDA autoscaling on queue depth or custom metrics; OpenTelemetry tracing basics.
+- **Learn:** KServe, llm-d, Gateway API Inference Extension (model-aware routing), KEDA autoscaling on queue depth or custom metrics; OpenTelemetry tracing basics; GitOps with Argo CD (how most clusters actually get deployed).
 - **Build:** KEDA autoscaling a dummy service on a custom metric in `kind`; add an OpenTelemetry trace to a small FastAPI "gateway."
 - **Ship:** a design doc: LLM serving on Kubernetes with routing, autoscaling, SLOs and tracing.
+- **Foundations:** install a serving stack with Helm (e.g. KServe or vLLM's chart) on `kind`; read the chart's templates and values to see what it creates.
+- **Mini-project:** `keda-autoscale`: KEDA scaling on a custom metric and one traced request.
 
 **Done when**
 
 - [ ] KEDA scaling demo working
 - [ ] One request traced end to end
 - [ ] Serving design doc written
+- [ ] A serving stack installed and inspected with Helm
 
 ### Week 44 · Terraform (light week)
 
 - **Learn:** Terraform basics: providers, resources, state, plan/apply/destroy.
 - **Build:** provision a GPU VM (or a CPU VM if you want to stay free) with Terraform, then destroy it.
 - **Ship:** catch up.
+- **Mini-project:** `terraform-gpu-vm`: a Terraform module that creates and destroys a GPU VM.
 
 **Done when**
 
@@ -77,6 +85,7 @@ title: "Phase 4 · Platform & economics"
 - **Learn:** FinOps Foundation framework; unit economics (cost per 1M tokens, cost per GPU-hour actually used); showback vs chargeback; OpenCost cost allocation.
 - **Build:** a cost-allocation module for the planner: cost per team, model and 1M tokens, including idle GPU cost.
 - **Ship:** a note on how idle capacity should be charged, and why it matters for reclamation.
+- **Mini-project:** `cost-allocator`: cost per team, model and 1M tokens, including idle cost.
 
 **Done when**
 
@@ -88,6 +97,7 @@ title: "Phase 4 · Platform & economics"
 - **Learn:** variables, constraints, objectives; LP vs MIP; OR-Tools (CP-SAT and linear solver) and PuLP.
 - **Build:** a toy GPU allocation model: choose counts of each GPU type to serve a set of workloads at minimum cost, subject to SLO-based throughput limits and budget.
 - **Ship:** the model in the P4 repo with a worked example.
+- **Mini-project:** `gpu-alloc-mip`: a toy GPU-allocation MIP in OR-Tools.
 
 **Done when**
 
@@ -99,6 +109,7 @@ title: "Phase 4 · Platform & economics"
 - **Learn:** time-series forecasting basics with uncertainty (Hyndman's *Forecasting: Principles and Practice*); discrete-event simulation with SimPy; M/M/c queues.
 - **Build:** simulate a GPU pool under bursty load in SimPy; compare simulated p95 latency with the queueing formula.
 - **Ship:** a chart showing why planning for the average fails under bursts.
+- **Mini-project:** `gpu-pool-sim`: a SimPy simulation compared with the queueing formula.
 
 **Done when**
 
@@ -110,6 +121,7 @@ title: "Phase 4 · Platform & economics"
 - **Learn:** how agent traffic differs: multiple LLM calls per task, growing context, tool-call latency, fan-out, bursts. Anthropic's *Building effective agents*; the MCP specification.
 - **Build:** a small MCP server (Python SDK) and a simple agent loop that uses it. Log tokens in/out, steps per task and wall time.
 - **Ship:** an "agent workload profile" with parameters the planner can use.
+- **Mini-project:** `agent-profiler`: an MCP server and agent loop that log tokens and steps per task.
 
 **Done when**
 
@@ -121,6 +133,7 @@ title: "Phase 4 · Platform & economics"
 
 - **Build:** load P1 benchmark data → per-GPU, per-config capacity curves → MIP that picks GPU type, count and serving config under SLO and budget.
 - **Ship:** core planner with tests.
+- **Mini-project:** `planner-core`: capacity curves → MIP planner, with tests.
 
 **Done when**
 
@@ -131,6 +144,7 @@ title: "Phase 4 · Platform & economics"
 
 - **Build:** add agentic workload profiles, MIG/time-slicing placement options and a Streamlit (or simple web) UI.
 - **Ship:** demo-able app.
+- **Mini-project:** `planner-ui`: agent workloads, placement options and a Streamlit UI.
 
 **Done when**
 
@@ -142,6 +156,7 @@ title: "Phase 4 · Platform & economics"
 
 - **Build:** expose the planner as an MCP tool so an assistant can ask "how many GPUs for this workload?"
 - **Ship:** write-up draft and a 3–5 minute demo video.
+- **Mini-project:** `planner-mcp`: the planner exposed as an MCP tool, plus a demo video.
 
 **Done when**
 
@@ -151,7 +166,8 @@ title: "Phase 4 · Platform & economics"
 ### Week 52 · Ship the capstone and look back
 
 - **Ship:** publish the capstone post; update your profile site, resume and LinkedIn; write the year retro.
-- **Plan:** set up the [interview prep](interview-prep.md) schedule.
+- **Plan:** set up the [interview prep](interview-prep.md) schedule; it runs at a light pace alongside [Phase 5](phase-5.md).
+- **Mini-project:** `P4 release`: tag v1.0 of the capacity planner and publish the post.
 
 **Done when**
 

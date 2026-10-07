@@ -1,0 +1,53 @@
+---
+// All weekly mini-projects, generated from the "Mini-project" line of each
+// week in content/roadmap/phase-*.md. Nothing to edit here.
+import Base from '../../layouts/Base.astro';
+import { getPhases } from '../../lib/content.mjs';
+
+const phases = getPhases();
+const all = phases.flatMap((p) => p.weeks);
+const withMini = all.filter((w) => w.mini);
+const shipped = withMini.filter((w) => w.complete).length;
+const statusLabel: Record<string, string> = { done: 'DONE', active: 'ACTIVE', partial: 'STARTED', ahead: 'AHEAD' };
+---
+<Base title="Weekly mini-projects">
+  <section class="page-head">
+    <div class="hero-text">
+      <span class="label">Projects · one per week</span>
+      <h1 class="page-title">{withMini.length} weekly mini-projects</h1>
+      <p class="lede">Every week ships one small, named thing: a script, a chart, a kernel or a note. They add up to the phase projects. A mini-project counts as shipped when all of its week's tasks are ticked.</p>
+    </div>
+    <div class="spec">
+      <div class="spec-title">MINI-PROJECTS</div>
+      <dl>
+        <dt>Total</dt><dd>{withMini.length}</dd>
+        <dt>Shipped</dt><dd>{shipped}</dd>
+        <dt>Phase projects</dt><dd>{phases.length}</dd>
+      </dl>
+    </div>
+  </section>
+
+  {phases.map((p) => (
+    <section class="section">
+      <div class="group-head">
+        <h2><span class="label" style="margin-right:10px">PH{p.n}</span><a href={p.href} style="text-decoration:none">{p.title}</a></h2>
+        <a class="mono" style="font-size:12px" href={p.projectHref}>→ {p.projectShort}</a>
+      </div>
+      <div class="table-wrap" style="border-top:0">
+        <table class="skill-table">
+          <thead><tr><th>Week</th><th>Mini-project</th><th class="dl">What you ship</th><th style="text-align:right">Status</th></tr></thead>
+          <tbody>
+            {p.weeks.filter((w) => w.mini).map((w) => (
+              <tr>
+                <td class="mono" style="font-size:12.5px"><a href={w.href}>{w.code}</a></td>
+                <td><span class="mini-name">{w.mini.name}</span></td>
+                <td class="done-text">{w.mini.desc}</td>
+                <td class="st"><span class={`chip ${w.status}`}>{statusLabel[w.status]}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+</Base>

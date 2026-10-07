@@ -6,7 +6,7 @@ title: Progress log
 
 Newest first. One short entry per week (or per session) using **did / learned / next**.
 
-- **Fastest way to add one:** the [Quick update](quick-update.md) page.
+- **Fastest way to add one:** the [Quick update](../quick-update/) page (**+ log progress** in the header). Tick the tasks you finished in the same form and they're ticked on the roadmap too.
 - **By hand:** copy the template below to just under the `LOG:START` marker in `content/progress-log.md`.
 
 ??? example "Entry template"

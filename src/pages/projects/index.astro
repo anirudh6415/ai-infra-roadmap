@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getFile, getProjects } from '../../lib/content.mjs';
-import { renderMarkdown } from '../../lib/markdown.mjs';
+import { getAllWeeks, getFile, getProjects } from '../../lib/content.mjs';
+import { renderMarkdown, url } from '../../lib/markdown.mjs';
 
 const projects = getProjects();
 const { data, body } = getFile('projects/index.md');
@@ -26,6 +26,14 @@ const html = renderMarkdown(body, 'projects/index.md');
       </a>
     ))}
   </div>
+
+  <a class="phase-cards" href={url('/projects/weekly/')} style="display:flex;text-decoration:none;color:inherit">
+    <span class="phase-card is-active" style="flex:1;border-right:0">
+      <span class="k">EVERY WEEK · {getAllWeeks().length} MINI-PROJECTS</span>
+      <span class="t">One small, named thing shipped every week</span>
+      <span class="m">A script, a chart, a kernel or a note. See the full list →</span>
+    </span>
+  </a>
 
   <div class="prose" set:html={html} />
 </Base>

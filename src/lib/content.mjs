@@ -82,14 +82,19 @@ function parseWeek(chunk, phase, file) {
   for (const line of body.split('\n')) {
     const f = line.match(/^[-*]\s+\*\*([^*:]+):\*\*\s*(.+)$/);
     const t = line.match(TASK);
-    if (t) tasks.push({ done: t[1].toLowerCase() === 'x', html: renderInline(t[2], file) });
+    if (t) tasks.push({ done: t[1].toLowerCase() === 'x', html: renderInline(t[2], file), text: plain(t[2]) });
     else if (f) fields.push({ label: f[1].trim(), html: renderInline(f[2], file), text: plain(f[2]) });
   }
   const done = tasks.filter((t) => t.done).length;
   const learn = fields.find((f) => /learn/i.test(f.label));
   const build = fields.find((f) => /build/i.test(f.label));
-  const summary = (build || learn || fields[0] || { text: '' }).text;
+  const mini = fields.find((f) => /mini-project/i.test(f.label));
+  const summary = (mini || build || learn || fields[0] || { text: '' }).text;
+  const miniName = mini ? (mini.text.match(/^([^:]+):/) || [, ''])[1].trim() : '';
+  const miniDesc = mini ? mini.text.replace(/^[^:]+:\s*/, '').replace(/\.$/, '') : '';
   return {
+    mini: mini ? { name: miniName, desc: miniDesc, html: mini.html } : null,
+    reading: readingFor(num),
     n: num, code: 'W' + String(num).padStart(2, '0'), id: 'w' + String(num).padStart(2, '0'),
     title, tag, light, phase: phase.n, phaseSlug: phase.slug,
     fields, tasks, done, total: tasks.length,
@@ -158,6 +163,15 @@ export function statusFromEmoji(cell = '') {
   return STATUS.find((s) => cell.includes(s.emoji)) || STATUS[2];
 }
 
+function tableRows(lines) {
+  const rows = lines
+    .filter((l) => l.trim().startsWith('|'))
+    .map((l) => l.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim()));
+  const header = rows.find((r) => !r.every((c) => /^:?-+:?$/.test(c) || c === ''));
+  const body = rows.filter((r) => r !== header && !r.every((c) => /^:?-+:?$/.test(c)));
+  return { header: header || [], body };
+}
+
 export function getSkills() {
   const file = 'skills.md';
   const { data, body } = getFile(file);
@@ -165,15 +179,16 @@ export function getSkills() {
   const intro = parts.shift();
   const groups = parts.map((part) => {
     const [name, ...lines] = part.split('\n');
-    const rows = lines
-      .filter((l) => l.trim().startsWith('|'))
-      .map((l) => l.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim()))
-      .filter((cells) => cells.length >= 3 && !/^-+$/.test(cells[0].replace(/:/g, '')) && cells[0] !== 'Skill');
+    const { header, body: rows } = tableRows(lines);
+    const col = (re) => header.findIndex((h) => re.test(h));
+    const iSkill = Math.max(0, col(/skill/i)), iDepth = col(/depth/i), iPhase = col(/phase/i);
+    const iDone = col(/done/i), iRes = col(/learn|resource/i);
     const skills = rows.map((c) => ({
-      name: renderInline(c[0], file),
-      depth: plain(c[1] || ''),
-      phase: c[2] || '',
-      done: c.length > 4 ? renderInline(c[3], file) : '',
+      name: renderInline(c[iSkill] || '', file),
+      depth: iDepth >= 0 ? plain(c[iDepth] || '') : '',
+      phase: iPhase >= 0 ? c[iPhase] || '' : '',
+      done: iDone >= 0 ? renderInline(c[iDone] || '', file) : '',
+      resources: iRes >= 0 ? renderInline(c[iRes] || '', file) : '',
       status: statusFromEmoji(c[c.length - 1]),
     }));
     return {
@@ -192,6 +207,40 @@ export function getSkills() {
       total: all.length,
     },
   };
+}
+
+/* ------------------------------------------------- resources → week map */
+
+let _reading;
+/** Resources whose "Week" column includes week n (from content/resources.md). */
+export function readingFor(n) {
+  if (!_reading) {
+    _reading = new Map();
+    const file = 'resources.md';
+    const { body } = getFile(file);
+    for (const section of body.split(/^##\s+/m).slice(1)) {
+      const { header, body: rows } = tableRows(section.split('\n'));
+      const iWeek = header.findIndex((h) => /^week$/i.test(h));
+      const iRes = header.findIndex((h) => /resource/i.test(h));
+      if (iWeek < 0 || iRes < 0) continue;
+      for (const r of rows) {
+        const cell = (r[iWeek] || '').replace(/[–—]/g, '-');
+        const weeks = new Set();
+        for (const part of cell.split(/[,;]/)) {
+          const m = part.trim().match(/^(\d+)\s*(?:-\s*(\d+))?$/);
+          if (!m) continue;
+          const a = Number(m[1]), b = Number(m[2] || m[1]);
+          for (let w = a; w <= b && w - a < 60; w++) weeks.add(w);
+        }
+        const html = renderInline(r[iRes], file);
+        for (const w of weeks) {
+          if (!_reading.has(w)) _reading.set(w, []);
+          _reading.get(w).push(html);
+        }
+      }
+    }
+  }
+  return _reading.get(n) || [];
 }
 
 /* -------------------------------------------------------------------- log */

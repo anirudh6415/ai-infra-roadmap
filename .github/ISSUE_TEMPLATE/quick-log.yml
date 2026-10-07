@@ -34,6 +34,18 @@ body:
       placeholder: Sweep concurrency 1→64 and plot throughput vs latency.
     validations:
       required: false
+  - type: textarea
+    id: completed
+    attributes:
+      label: Completed
+      description: >-
+        Tasks to tick on the roadmap, one per line. Use the task ID (W01.1 = Week 1, first task)
+        or paste the task's text. The site's log form fills this in for you.
+      placeholder: |
+        W01.1 · Roadmap site is live on GitHub Pages
+        W01.3 · vLLM generates text on a free GPU and you've written down tokens/s
+    validations:
+      required: false
   - type: input
     id: hours
     attributes:

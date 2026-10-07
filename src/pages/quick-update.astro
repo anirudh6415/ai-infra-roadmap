@@ -11,7 +11,7 @@ const week = getCurrentWeek();
     <div class="hero-text">
       <span class="label">Quick update · no files to edit</span>
       <h1 class="page-title">Log progress</h1>
-      <p class="lede">Write the entry and press submit. GitHub opens with everything filled in; press <b>Submit new issue</b> there. About a minute later the entry is in the <a href={url('/progress-log/')}>progress log</a>, the README is refreshed and the issue closes itself.</p>
+      <p class="lede">Tick the tasks you finished, write a line or two, and press submit. GitHub opens with everything filled in; press <b>Submit new issue</b> there. About a minute later the entry is in the <a href={url('/progress-log/')}>progress log</a>, the README is refreshed and the issue closes itself.</p>
     </div>
   </section>
 
@@ -24,12 +24,16 @@ const week = getCurrentWeek();
       <h3 id="how-it-works">How it works</h3>
       <p>GitHub Pages only serves static files, so this page can't save anything by itself. It builds a link to a pre-filled <em>Quick log</em> issue. When you submit it, the <code>quick-log</code> workflow:</p>
       <ol>
-        <li>checks that the issue is yours and its title starts with <code>[log]</code> (anyone else's issue is ignored),</li>
+        <li>checks that the issue is from the repo owner and its title starts with <code>[log]</code>,</li>
         <li>adds the entry to the top of <code>content/progress-log.md</code>,</li>
+        <li>ticks the tasks you chose in <code>content/roadmap/</code>, so every progress bar, the timeline and the current week update,</li>
         <li>refreshes the README progress block,</li>
         <li>rebuilds and redeploys this site,</li>
-        <li>closes the issue with a ✅ comment.</li>
+        <li>comments with what it ticked (and anything it couldn't match), then closes the issue.</li>
       </ol>
+      <p><code>[log]</code> issues from anyone else are closed and locked automatically, and nothing is logged.</p>
+      <h3 id="ticking-from-the-github-app">Ticking from the GitHub app</h3>
+      <p>In the <b>Completed</b> field, put one task per line: an ID like <code>W01.2</code> (Week 1, second task) or the task's text. IDs are shown next to each task in this form.</p>
       <p>Your draft stays in this browser until you clear it. <b>Copy markdown</b> gives you the same entry to paste into GitBook.</p>
     </div>
   </section>

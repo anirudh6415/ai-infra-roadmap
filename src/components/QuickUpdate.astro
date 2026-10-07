@@ -1,7 +1,12 @@
 ---
 import { SITE } from '../config.mjs';
+import { getAllWeeks } from '../lib/content.mjs';
 interface Props { week?: number }
 const { week } = Astro.props;
+// Every week's tasks, so the form can show checkboxes for whichever week is chosen.
+const taskData = Object.fromEntries(
+  getAllWeeks().map((w) => [w.n, { title: w.title, tasks: w.tasks.map((t: any) => ({ text: t.text, done: t.done })) }]),
+);
 ---
 <form class="qu" id="qu-form" data-owner={SITE.owner} data-repo={SITE.repo} autocomplete="off">
   <span class="prompt">$ log --week {week ? String(week).padStart(2, '0') : '__'}</span>
@@ -15,6 +20,12 @@ const { week } = Astro.props;
       <input id="qu-hours" name="hours" type="number" min="0" max="40" step="0.5" placeholder="2" />
     </div>
   </div>
+
+  <fieldset class="qu-tasks" id="qu-tasks">
+    <legend>completed this session <span id="qu-tasks-week"></span></legend>
+    <div id="qu-task-list"></div>
+  </fieldset>
+
   <label for="qu-did">did (required)</label>
   <textarea id="qu-did" name="did" rows="3" placeholder="What did you do?"></textarea>
   <label for="qu-learned">learned</label>
@@ -30,48 +41,97 @@ const { week } = Astro.props;
   </div>
   <p class="status" id="qu-status" role="status"></p>
 </form>
+<script type="application/json" id="qu-task-data" set:html={JSON.stringify(taskData)} />
 
 <script>
   // Builds a pre-filled GitHub issue (template quick-log.yml). The quick-log
-  // workflow turns it into a progress-log entry. Field names match the template ids.
+  // workflow turns it into a progress-log entry and ticks the chosen tasks.
   const FIELDS = ['week', 'hours', 'did', 'learned', 'next', 'links'];
   const KEY = 'air-quick-update-draft';
   const form = document.getElementById('qu-form') as HTMLFormElement | null;
 
+  type Week = { title: string; tasks: { text: string; done: boolean }[] };
+  let data: Record<string, Week> = {};
+  try { data = JSON.parse(document.getElementById('qu-task-data')?.textContent || '{}'); } catch {}
+
   if (form) {
     const status = document.getElementById('qu-status');
+    const list = document.getElementById('qu-task-list') as HTMLElement;
+    const weekLabel = document.getElementById('qu-tasks-week') as HTMLElement;
     const say = (m: string) => { if (status) status.textContent = m; };
     const field = (n: string) => form.elements.namedItem(n) as HTMLInputElement | null;
     const values = () => Object.fromEntries(FIELDS.map((f) => [f, (field(f)?.value || '').trim()]));
-    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(values())); } catch {} };
+    const pad = (n: number) => String(n).padStart(2, '0');
 
+    const renderTasks = () => {
+      const n = Number(field('week')?.value || 0);
+      const w = data[String(n)];
+      list.replaceChildren();
+      if (!w) {
+        weekLabel.textContent = '';
+        const p = document.createElement('p');
+        p.className = 'qu-empty';
+        p.textContent = 'Enter a week number to pick tasks you finished.';
+        list.append(p);
+        return;
+      }
+      weekLabel.textContent = `· W${pad(n)} ${w.title}`;
+      w.tasks.forEach((t, i) => {
+        const id = `qu-t-${n}-${i + 1}`;
+        const row = document.createElement('label');
+        row.className = 'qu-task' + (t.done ? ' is-done' : '');
+        row.htmlFor = id;
+        const box = document.createElement('input');
+        box.type = 'checkbox';
+        box.id = id;
+        box.dataset.ref = `W${pad(n)}.${i + 1} · ${t.text}`;
+        if (t.done) { box.checked = true; box.disabled = true; }
+        const span = document.createElement('span');
+        span.textContent = `W${pad(n)}.${i + 1}  ${t.text}${t.done ? '  (done)' : ''}`;
+        row.append(box, span);
+        list.append(row);
+      });
+    };
+    const completed = () =>
+      Array.from(list.querySelectorAll<HTMLInputElement>('input[type=checkbox]:checked:not(:disabled)')).map((b) => b.dataset.ref || '');
+
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(values())); } catch {} };
     try {
       const draft = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (draft) for (const f of FIELDS) { const el = field(f); if (draft[f] && el) el.value = draft[f]; }
+      if (draft) for (const f of FIELDS) { const el = field(f); if (draft[f] && el && f !== 'week') el.value = draft[f]; }
     } catch {}
+    renderTasks();
 
-    form.addEventListener('input', save);
+    form.addEventListener('input', (e) => {
+      if ((e.target as HTMLElement).id === 'qu-week') renderTasks();
+      save();
+    });
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const v = values();
-      if (!v.did) { say('Add at least one line under "did".'); field('did')?.focus(); return; }
+      const done = completed();
+      if (!v.did && done.length) v.did = 'Completed: ' + done.map((d) => d.split(' · ')[1]).join('; ');
+      if (!v.did) { say('Add a line under "did" or tick at least one task.'); field('did')?.focus(); return; }
       const title = '[log] ' + (v.week ? `Week ${v.week}: ` : '') + v.did.split('\n')[0].slice(0, 60);
       const params = new URLSearchParams({ template: 'quick-log.yml', title });
       for (const f of FIELDS) if (v[f]) params.set(f, v[f]);
+      if (done.length) params.set('completed', done.join('\n'));
       const href = `https://github.com/${form.dataset.owner}/${form.dataset.repo}/issues/new?${params}`;
       window.open(href, '_blank', 'noopener');
-      say('GitHub opened in a new tab. Press "Submit new issue" there. The site updates in about a minute.');
+      say(`GitHub opened in a new tab${done.length ? ` with ${done.length} task(s) to tick` : ''}. Press "Submit new issue" there. The site updates in about a minute.`);
     });
 
     document.getElementById('qu-copy')?.addEventListener('click', async () => {
       const v = values();
       const d = new Date();
-      const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      const done = completed();
       const md = [
         `## ${date}${v.week ? ' · Week ' + v.week : ''}`, '',
         v.did && `**Did:** ${v.did}  `, v.learned && `**Learned:** ${v.learned}  `,
-        v.next && `**Next:** ${v.next}  `, v.hours && `**Hours:** ${v.hours}  `, v.links && `**Links:** ${v.links}`,
+        v.next && `**Next:** ${v.next}  `, done.length && `**Completed:** ${done.map((x) => '✓ ' + x).join('<br>')}  `,
+        v.hours && `**Hours:** ${v.hours}  `, v.links && `**Links:** ${v.links}`,
       ].filter(Boolean).join('\n');
       try { await navigator.clipboard.writeText(md); say('Copied as Markdown.'); }
       catch { say('Copy failed. Select the text and copy it manually.'); }
@@ -80,6 +140,7 @@ const { week } = Astro.props;
     document.getElementById('qu-clear')?.addEventListener('click', () => {
       form.reset();
       try { localStorage.removeItem(KEY); } catch {}
+      renderTasks();
       say('Cleared.');
     });
   }

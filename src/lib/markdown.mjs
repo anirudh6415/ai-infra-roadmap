@@ -98,7 +98,7 @@ function makeMarked(fromFile) {
       code(token) {
         const lang = (token.lang || '').trim();
         const body = escapeHtml(token.text);
-        if (lang === 'formula' || lang === 'text') {
+        if (lang === 'formula' || lang === 'text' || lang === 'prompt') {
           return `<pre class="term term-${lang}"><code>${body}</code></pre>\n`;
         }
         return `<pre class="code"${lang ? ` data-lang="${escapeHtml(lang)}"` : ''}><code>${body}</code></pre>\n`;
