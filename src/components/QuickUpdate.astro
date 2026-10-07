@@ -1,86 +1,244 @@
 ---
+// Owner-only progress logging. The entry is committed straight to
+// content/progress-log.md through the GitHub API with a fine-grained token
+// that lives only in the owner's browser. Visitors never see the form, and
+// without the token nothing can be written.
 import { SITE } from '../config.mjs';
-interface Props { week?: number }
-const { week } = Astro.props;
+interface Props { week?: number; mode?: 'embed' | 'page' }
+const { week, mode = 'embed' } = Astro.props;
+const tokenUrl = 'https://github.com/settings/personal-access-tokens/new';
 ---
-<form class="qu" id="qu-form" data-owner={SITE.owner} data-repo={SITE.repo} autocomplete="off">
-  <span class="prompt">$ log --week {week ? String(week).padStart(2, '0') : '__'}</span>
-  <div class="row2">
-    <div>
-      <label for="qu-week">week</label>
-      <input id="qu-week" name="week" type="number" min="1" max="60" value={week ?? ''} placeholder="1" />
+<div class="qu-wrap" data-mode={mode} data-owner={SITE.owner} data-repo={SITE.repo} data-branch={SITE.branch}>
+  {mode === 'page' && (
+    <form class="qu" id="qu-unlock" hidden autocomplete="off">
+      <span class="prompt">$ unlock --owner</span>
+      <p style="margin:0">Paste your fine-grained GitHub token for <b>{SITE.owner}/{SITE.repo}</b> (Contents: read and write). It stays in this browser and is only sent to api.github.com.</p>
+      <label for="qu-token">token</label>
+      <input id="qu-token" name="token" type="password" placeholder="github_pat_…" spellcheck="false" />
+      <label style="display:flex;gap:8px;align-items:center;color:var(--term-fg)"><input id="qu-remember" type="checkbox" checked style="width:auto" /> remember on this device</label>
+      <div class="actions">
+        <button type="submit" class="primary">unlock ↵</button>
+        <a href={tokenUrl} target="_blank" rel="noopener" style="color:var(--term-accent);align-self:center">create a token ↗</a>
+      </div>
+      <p class="status" id="qu-unlock-status" role="status"></p>
+    </form>
+  )}
+
+  <form class="qu" id="qu-form" hidden autocomplete="off">
+    <span class="prompt">$ log --week {week ? String(week).padStart(2, '0') : '__'}</span>
+    <div class="row2">
+      <div>
+        <label for="qu-week">week</label>
+        <input id="qu-week" name="week" type="number" min="1" max="60" value={week ?? ''} placeholder="1" />
+      </div>
+      <div>
+        <label for="qu-hours">hours</label>
+        <input id="qu-hours" name="hours" type="number" min="0" max="40" step="0.5" placeholder="2" />
+      </div>
     </div>
-    <div>
-      <label for="qu-hours">hours</label>
-      <input id="qu-hours" name="hours" type="number" min="0" max="40" step="0.5" placeholder="2" />
+    <label for="qu-did">did (required)</label>
+    <textarea id="qu-did" name="did" rows="3" placeholder="What did you do?"></textarea>
+    <label for="qu-learned">learned</label>
+    <textarea id="qu-learned" name="learned" rows="2" placeholder="The one thing you'd explain to someone else"></textarea>
+    <label for="qu-next">next</label>
+    <input id="qu-next" name="next" type="text" placeholder="The very next step" />
+    <label for="qu-links">links</label>
+    <input id="qu-links" name="links" type="text" placeholder="Commit, notebook or post URLs (optional)" />
+    <div class="actions">
+      <button type="submit" class="primary" id="qu-save">save entry ↵</button>
+      <button type="button" id="qu-copy">copy markdown</button>
+      <button type="button" id="qu-clear">clear</button>
+      {mode === 'page' && <button type="button" id="qu-lock">lock</button>}
     </div>
-  </div>
-  <label for="qu-did">did (required)</label>
-  <textarea id="qu-did" name="did" rows="3" placeholder="What did you do?"></textarea>
-  <label for="qu-learned">learned</label>
-  <textarea id="qu-learned" name="learned" rows="2" placeholder="The one thing you'd explain to someone else"></textarea>
-  <label for="qu-next">next</label>
-  <input id="qu-next" name="next" type="text" placeholder="The very next step" />
-  <label for="qu-links">links</label>
-  <input id="qu-links" name="links" type="text" placeholder="Commit, notebook or post URLs (optional)" />
-  <div class="actions">
-    <button type="submit" class="primary">submit via github ↵</button>
-    <button type="button" id="qu-copy">copy markdown</button>
-    <button type="button" id="qu-clear">clear</button>
-  </div>
-  <p class="status" id="qu-status" role="status"></p>
-</form>
+    <p class="status" id="qu-status" role="status"></p>
+  </form>
+</div>
 
 <script>
-  // Builds a pre-filled GitHub issue (template quick-log.yml). The quick-log
-  // workflow turns it into a progress-log entry. Field names match the template ids.
+  const TOKEN_KEY = 'air-gh-token';
+  const DRAFT_KEY = 'air-quick-update-draft';
   const FIELDS = ['week', 'hours', 'did', 'learned', 'next', 'links'];
-  const KEY = 'air-quick-update-draft';
-  const form = document.getElementById('qu-form') as HTMLFormElement | null;
+  const LOG_PATH = 'content/progress-log.md';
+  const START = '<!-- LOG:START -->';
 
-  if (form) {
+  const store = {
+    get(): string | null {
+      try { return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY); } catch { return null; }
+    },
+    set(t: string, remember: boolean) {
+      try { (remember ? localStorage : sessionStorage).setItem(TOKEN_KEY, t); } catch {}
+    },
+    clear() {
+      try { localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY); } catch {}
+    },
+  };
+
+  const b64ToUtf8 = (b64: string) =>
+    new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, '')), (c) => c.charCodeAt(0)));
+  const utf8ToB64 = (s: string) => {
+    let bin = '';
+    for (const byte of new TextEncoder().encode(s)) bin += String.fromCharCode(byte);
+    return btoa(bin);
+  };
+
+  async function gh(token: string, path: string, init: RequestInit = {}) {
+    const res = await fetch('https://api.github.com' + path, {
+      ...init,
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: 'Bearer ' + token,
+        'X-GitHub-Api-Version': '2022-11-28',
+        ...(init.body ? { 'Content-Type': 'application/json' } : {}),
+      },
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const err = new Error(data.message || res.statusText) as Error & { status?: number };
+      err.status = res.status;
+      throw err;
+    }
+    return data;
+  }
+
+  function today() {
+    // YYYY-MM-DD in New York time, matching the log's convention
+    return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  }
+
+  function buildEntry(v: Record<string, string>) {
+    const para = (s: string) => s.split('\n').map((x) => x.trim()).filter(Boolean).join('<br>');
+    const lines = [`## ${today()}${v.week ? ' · Week ' + v.week : ''}`, ''];
+    if (v.did) lines.push(`**Did:** ${para(v.did)}  `);
+    if (v.learned) lines.push(`**Learned:** ${para(v.learned)}  `);
+    if (v.next) lines.push(`**Next:** ${para(v.next)}  `);
+    if (v.hours) lines.push(`**Hours:** ${v.hours}  `);
+    if (v.links) {
+      const links = v.links.split(/[,\n]/).map((l) => l.trim()).filter(Boolean)
+        .map((l) => (l.startsWith('http') ? `<${l}>` : l));
+      lines.push(`**Links:** ${links.join(', ')}  `);
+    }
+    lines[lines.length - 1] = lines[lines.length - 1].trimEnd();
+    return lines.join('\n');
+  }
+
+  function revealOwnerUi() {
+    document.querySelectorAll<HTMLElement>('.owner-only').forEach((el) => { el.hidden = false; });
+  }
+
+  const wrap = document.querySelector<HTMLElement>('.qu-wrap');
+  if (wrap) {
+    const { owner, repo, branch, mode } = wrap.dataset as Record<string, string>;
+    const form = document.getElementById('qu-form') as HTMLFormElement;
+    const unlock = document.getElementById('qu-unlock') as HTMLFormElement | null;
     const status = document.getElementById('qu-status');
-    const say = (m: string) => { if (status) status.textContent = m; };
+    const say = (m: string, html = false) => { if (status) status[html ? 'innerHTML' : 'textContent'] = m; };
     const field = (n: string) => form.elements.namedItem(n) as HTMLInputElement | null;
     const values = () => Object.fromEntries(FIELDS.map((f) => [f, (field(f)?.value || '').trim()]));
-    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(values())); } catch {} };
+    const saveDraft = () => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(values())); } catch {} };
+
+    const showState = () => {
+      const token = store.get();
+      form.hidden = !token;
+      if (unlock) unlock.hidden = !!token;
+      if (!token && mode !== 'page') wrap.closest<HTMLElement>('.owner-only')?.setAttribute('hidden', '');
+    };
+    showState();
 
     try {
-      const draft = JSON.parse(localStorage.getItem(KEY) || 'null');
-      if (draft) for (const f of FIELDS) { const el = field(f); if (draft[f] && el) el.value = draft[f]; }
+      const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+      if (draft) for (const f of FIELDS) { const el = field(f); if (draft[f] && el && f !== 'week') el.value = draft[f]; }
     } catch {}
+    form.addEventListener('input', saveDraft);
 
-    form.addEventListener('input', save);
-
-    form.addEventListener('submit', (e) => {
+    unlock?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const out = document.getElementById('qu-unlock-status');
+      const input = document.getElementById('qu-token') as HTMLInputElement;
+      const remember = (document.getElementById('qu-remember') as HTMLInputElement).checked;
+      const token = input.value.trim();
+      if (!token) { if (out) out.textContent = 'Paste a token first.'; return; }
+      if (out) out.textContent = 'Checking…';
+      try {
+        const me = await gh(token, '/user');
+        if (String(me.login).toLowerCase() !== owner.toLowerCase()) {
+          if (out) out.textContent = `That token belongs to ${me.login}. Only ${owner} can log progress here.`;
+          return;
+        }
+        await gh(token, `/repos/${owner}/${repo}/contents/${LOG_PATH}?ref=${branch}`);
+        store.set(token, remember);
+        input.value = '';
+        if (out) out.textContent = '';
+        showState();
+        revealOwnerUi();
+        say('Unlocked. Entries you save are committed to the repo.');
+      } catch (err: any) {
+        if (out) out.textContent = err.status === 401
+          ? 'GitHub rejected that token. Check it was copied fully and has not expired.'
+          : err.status === 404
+            ? `That token can't see ${owner}/${repo}. Give it access to this repository.`
+            : 'Could not reach GitHub: ' + err.message;
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const token = store.get();
+      if (!token) { showState(); return; }
       const v = values();
       if (!v.did) { say('Add at least one line under "did".'); field('did')?.focus(); return; }
-      const title = '[log] ' + (v.week ? `Week ${v.week}: ` : '') + v.did.split('\n')[0].slice(0, 60);
-      const params = new URLSearchParams({ template: 'quick-log.yml', title });
-      for (const f of FIELDS) if (v[f]) params.set(f, v[f]);
-      const href = `https://github.com/${form.dataset.owner}/${form.dataset.repo}/issues/new?${params}`;
-      window.open(href, '_blank', 'noopener');
-      say('GitHub opened in a new tab. Press "Submit new issue" there. The site updates in about a minute.');
+      const btn = document.getElementById('qu-save') as HTMLButtonElement;
+      btn.disabled = true;
+      say('Saving…');
+      const entry = buildEntry(v);
+      const message = `log: ${v.week ? 'Week ' + v.week + ' · ' : ''}${v.did.split('\n')[0].slice(0, 60)}`;
+      try {
+        let result: any;
+        for (let attempt = 0; attempt < 2; attempt++) {
+          const file = await gh(token, `/repos/${owner}/${repo}/contents/${LOG_PATH}?ref=${branch}`);
+          const text = b64ToUtf8(file.content);
+          if (!text.includes(START)) throw new Error(`${LOG_PATH} is missing the ${START} marker`);
+          const next = text.replace(START, `${START}\n\n${entry}`);
+          try {
+            result = await gh(token, `/repos/${owner}/${repo}/contents/${LOG_PATH}`, {
+              method: 'PUT',
+              body: JSON.stringify({ message, content: utf8ToB64(next), sha: file.sha, branch }),
+            });
+            break;
+          } catch (err: any) {
+            if (err.status === 409 && attempt === 0) continue; // file changed meanwhile: re-read and retry once
+            throw err;
+          }
+        }
+        for (const f of ['did', 'learned', 'next', 'links', 'hours']) { const el = field(f); if (el) el.value = ''; }
+        saveDraft();
+        const link = result?.commit?.html_url;
+        say(`Saved ✓ The site rebuilds in about a minute.${link ? ` <a href="${link}" target="_blank" rel="noopener" style="color:var(--term-accent)">view commit ↗</a>` : ''}`, true);
+      } catch (err: any) {
+        if (err.status === 401) { store.clear(); showState(); say('Your token expired or was revoked. Unlock again on the Log progress page.'); }
+        else if (err.status === 403 || err.status === 404) say("This token can't write to the repo. It needs Contents: read and write for this repository.");
+        else say('Not saved: ' + err.message + '. Your text is kept as a draft.');
+      } finally {
+        btn.disabled = false;
+      }
     });
 
     document.getElementById('qu-copy')?.addEventListener('click', async () => {
-      const v = values();
-      const d = new Date();
-      const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      const md = [
-        `## ${date}${v.week ? ' · Week ' + v.week : ''}`, '',
-        v.did && `**Did:** ${v.did}  `, v.learned && `**Learned:** ${v.learned}  `,
-        v.next && `**Next:** ${v.next}  `, v.hours && `**Hours:** ${v.hours}  `, v.links && `**Links:** ${v.links}`,
-      ].filter(Boolean).join('\n');
-      try { await navigator.clipboard.writeText(md); say('Copied as Markdown.'); }
+      try { await navigator.clipboard.writeText(buildEntry(values())); say('Copied as Markdown.'); }
       catch { say('Copy failed. Select the text and copy it manually.'); }
     });
 
     document.getElementById('qu-clear')?.addEventListener('click', () => {
-      form.reset();
-      try { localStorage.removeItem(KEY); } catch {}
+      for (const f of ['did', 'learned', 'next', 'links', 'hours']) { const el = field(f); if (el) el.value = ''; }
+      try { localStorage.removeItem(DRAFT_KEY); } catch {}
       say('Cleared.');
+    });
+
+    document.getElementById('qu-lock')?.addEventListener('click', () => {
+      store.clear();
+      document.querySelectorAll<HTMLElement>('.owner-only').forEach((el) => { el.hidden = true; });
+      showState();
+      const out = document.getElementById('qu-unlock-status');
+      if (out) out.textContent = 'Locked. The token was removed from this browser.';
     });
   }
 </script>

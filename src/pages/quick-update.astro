@@ -3,34 +3,39 @@ import Base from '../layouts/Base.astro';
 import QuickUpdate from '../components/QuickUpdate.astro';
 import { getCurrentWeek } from '../lib/content.mjs';
 import { url } from '../lib/markdown.mjs';
+import { SITE } from '../config.mjs';
 
 const week = getCurrentWeek();
 ---
-<Base title="Quick update">
+<Base title="Log progress">
   <section class="page-head">
     <div class="hero-text">
-      <span class="label">Quick update · no files to edit</span>
+      <span class="label">Owner only · progress logging</span>
       <h1 class="page-title">Log progress</h1>
-      <p class="lede">Write the entry and press submit. GitHub opens with everything filled in; press <b>Submit new issue</b> there. About a minute later the entry is in the <a href={url('/progress-log/')}>progress log</a>, the README is refreshed and the issue closes itself.</p>
+      <p class="lede">Entries are committed straight to the <a href={url('/progress-log/')}>progress log</a> in the repo. Only a browser unlocked with {SITE.owner}'s GitHub token can save one.</p>
     </div>
   </section>
 
   <section class="split">
     <div class="side" style="flex: 1 1 420px; max-width: 560px">
-      <QuickUpdate week={week?.n} />
+      <QuickUpdate week={week?.n} mode="page" />
     </div>
     <div class="grow prose">
-      <div class="callout callout-tip"><p class="callout-title">Works from your phone</p><p>Bookmark this page on your home screen. You need to be signed in to GitHub in that browser, or have the GitHub app, for the final click.</p></div>
-      <h3 id="how-it-works">How it works</h3>
-      <p>GitHub Pages only serves static files, so this page can't save anything by itself. It builds a link to a pre-filled <em>Quick log</em> issue. When you submit it, the <code>quick-log</code> workflow:</p>
+      <h3 id="one-time-setup">One-time setup (per device)</h3>
       <ol>
-        <li>checks that the issue is yours and its title starts with <code>[log]</code> (anyone else's issue is ignored),</li>
-        <li>adds the entry to the top of <code>content/progress-log.md</code>,</li>
-        <li>refreshes the README progress block,</li>
-        <li>rebuilds and redeploys this site,</li>
-        <li>closes the issue with a ✅ comment.</li>
+        <li>On GitHub open <b>Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token</b>.</li>
+        <li><b>Repository access:</b> <em>Only select repositories</em> → <code>{SITE.repo}</code>.</li>
+        <li><b>Permissions:</b> <em>Contents → Read and write</em>. Nothing else is needed.</li>
+        <li>Pick an expiry (for example 1 year), generate, copy the token and paste it here.</li>
       </ol>
-      <p>Your draft stays in this browser until you clear it. <b>Copy markdown</b> gives you the same entry to paste into GitBook.</p>
+      <h3 id="how-it-works">How it works</h3>
+      <ul>
+        <li>Saving adds your entry to the top of <code>content/progress-log.md</code> as a normal commit. That push rebuilds the site and refreshes the README.</li>
+        <li>The token is stored only in this browser and sent only to <code>api.github.com</code>. It's limited to this one repository's files.</li>
+        <li>Visitors don't see the log form or the "+ log progress" button. Without your token, nothing can be written.</li>
+        <li>On a shared computer, untick <em>remember on this device</em>, or press <b>lock</b> when done.</li>
+      </ul>
+      <div class="callout callout-warning"><p class="callout-title">Lost device or leaked token?</p><p>Revoke it under GitHub → Settings → Developer settings → Fine-grained tokens. It stops working immediately.</p></div>
     </div>
   </section>
 </Base>

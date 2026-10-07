@@ -1,11 +1,10 @@
 name: Build & deploy site
 
-# Runs on every push to main, on demand, and when the quick-log workflow calls it.
+# Runs on every push to main (including entries saved from the Log progress page) and on demand.
 on:
   push:
     branches: [main]
   workflow_dispatch:
-  workflow_call:
 
 permissions:
   contents: write   # to commit the refreshed README

@@ -6,7 +6,7 @@ title: Progress log
 
 Newest first. One short entry per week (or per session) using **did / learned / next**.
 
-- **Fastest way to add one:** the [Quick update](quick-update.md) page.
+- **Fastest way to add one:** press **+ log progress** on the site (owner only, after unlocking with your token).
 - **By hand:** copy the template below to just under the `LOG:START` marker in `content/progress-log.md`.
 
 ??? example "Entry template"
